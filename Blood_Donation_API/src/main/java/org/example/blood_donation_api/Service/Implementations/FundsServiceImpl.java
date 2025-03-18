@@ -1,0 +1,75 @@
+package org.example.blood_donation_api.Service.Implementations;
+
+import jakarta.transaction.Transactional;
+import org.example.blood_donation_api.Entity.Funds;
+import org.example.blood_donation_api.Repo.FundsRepo;
+import org.example.blood_donation_api.dto.FundsDTO;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+@Transactional
+public class FundsServiceImpl {
+
+    @Autowired
+    private FundsRepo fundsRepo;
+
+    @Autowired
+    private ModelMapper modelMapper;
+
+    public List<FundsDTO> getAllFunds(){
+        List<Funds> fundsList = fundsRepo.findAll();
+        return modelMapper.map(fundsList, new TypeToken<List<FundsDTO>>(){}.getType());
+    }
+
+    public FundsDTO saveFunds(FundsDTO fundsDTO) {
+        fundsRepo.save(modelMapper.map(fundsDTO, Funds.class));
+        return fundsDTO;
+    }
+
+    public FundsDTO updateFunds(FundsDTO fundsDTO) {
+        fundsRepo.save(modelMapper.map(fundsDTO, Funds.class));
+        return fundsDTO;
+    }
+
+    public String deleteFunds(Integer Fund_id) {
+        fundsRepo.deleteById(Fund_id);
+        return "Fund Details Delete!";
+    }
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -8,15 +8,17 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class Patient {
+@Entity
+public class Funds {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int Patient_id;
-    private String name;
-    private String email;
-    private String address;
+    private int Fund_id;
+
+    private String description;
+    private Double amount;
+    private String paymentMethode;
+
 }
