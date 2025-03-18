@@ -2,6 +2,7 @@ package org.example.blood_donation_api.Service.Implementations;
 
 import jakarta.transaction.Transactional;
 import org.example.blood_donation_api.Entity.BloodBank;
+import org.example.blood_donation_api.Entity.Employee;
 import org.example.blood_donation_api.Repo.BloodBankRepo;
 import org.example.blood_donation_api.Repo.EmployeeRepo;
 import org.example.blood_donation_api.dto.BloodBankDTO;
@@ -32,8 +33,18 @@ public class BloodBankServiceImpl {
     }
 
     public BloodBankDTO saveNewBloodsToGroup(BloodBankDTO bloodBankDTO){
-        bloodBankRepo.save(modelMapper.map(bloodBankDTO, BloodBank.class));
+        BloodBank bloodBank = modelMapper.map(bloodBankDTO, BloodBank.class);
+
+        bloodBankRepo.save(bloodBank);
+
+        for (EmployeeDTO employeeDTO : bloodBankDTO.getEmployeeDTOS()) {
+            Employee employee = modelMapper.map(employeeDTO, Employee.class);
+            employee.setBloodBank(bloodBank);
+            employeeRepo.save(employee);
+        }
+
         return bloodBankDTO;
+
     }
 
     public BloodBankDTO updateBloodGroupsDetails(BloodBankDTO bloodBankDTO){

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -15,6 +16,6 @@ public class BloodBankDTO {
     private Date date;
     private Double points;
 
-    private List<EmployeeDTO> employeeDTOS;
+    private List<EmployeeDTO> employeeDTOS= new ArrayList<>();
 
 }
