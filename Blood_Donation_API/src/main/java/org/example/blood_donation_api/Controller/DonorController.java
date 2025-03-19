@@ -15,7 +15,52 @@ public class DonorController {
     @Autowired
     private DonorServiceImpl donorService;
 
+    @GetMapping("get")
+    public List<DonorDTO> getAllDonors() {
+        return donorService.getAllDonors();
+    }
+
     @PostMapping("save")
+    public DonorDTO saveDonors(@RequestBody DonorDTO donorDTO) {
+        return donorService.saveDonor(donorDTO);
+    }
+
+    @PutMapping("update")
+    public DonorDTO updateDonors(@RequestBody DonorDTO donorDTO) {
+        return donorService.updateDonors(donorDTO);
+    }
+
+    @DeleteMapping("delete/{donor_id}")
+    public String deleteDonors(@PathVariable Integer donor_id) {
+        donorService.deleteDonors(donor_id);
+        return "Donor deleted!";
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /*@PostMapping("save")
     public ResponseUtil saveDonor(@RequestBody DonorDTO donorDTO) {
         donorService.addDonor(donorDTO);
         return new ResponseUtil(201, "Donor Saved!", null);
@@ -33,16 +78,16 @@ public class DonorController {
         return new ResponseUtil(200, "Donor Deleted!", null);
     }
 
-    /*@GetMapping("getAll")
+    *//*@GetMapping("getAll")
     public ResponseUtil getAllDonors(){
         return new ResponseUtil(200, "Donor Liiist!", null);
-    }*/
+    }*//*
 
     @GetMapping("get")
     public List<DonorDTO> getAllDonors(){
         List<DonorDTO> donorDTOS=donorService.getAllDonors();
         return donorDTOS;
-    }
+    }*/
 
 
 }

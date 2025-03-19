@@ -11,10 +11,12 @@ import lombok.NoArgsConstructor;
 @Entity
 public class Receptionist {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-increment
-    private int Receptionist_id;
+    private int receptionistId;
 
     private String name;
     private String email;
     private String address;
+
+    /*@OneToOne(mappedBy = "receptionist")
+    private BloodBank bloodBank;*/
 }

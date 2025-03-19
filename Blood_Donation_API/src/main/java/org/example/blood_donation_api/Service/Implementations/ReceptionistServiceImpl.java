@@ -35,8 +35,8 @@ public class ReceptionistServiceImpl {
         return receptionistDTO;
     }
 
-    public String deleteReceptionist(Integer Receptionist_id) {
-        receptionistRepo.deleteById(Receptionist_id);
+    public String deleteReceptionist(Integer receptionistId) {
+        receptionistRepo.deleteById(receptionistId);
         return "Receptionist Details Deleted!";
     }
 }

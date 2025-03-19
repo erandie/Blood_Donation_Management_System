@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class ReceptionistDTO {
-    private int Receptionist_id;
+    private int receptionistId;
     private String name;
     private String email;
     private String address;

@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin
 @RestController
 @RequestMapping("api/v1/receptionist")
-@CrossOrigin
 public class ReceptionistController {
 
     @Autowired
@@ -30,9 +30,9 @@ public class ReceptionistController {
         return receptionistService.updateReceptionist(receptionistDTO);
     }
 
-    @DeleteMapping("delete/{Receptionist_id}")
-    public String deleteReceptionist(@PathVariable Integer Receptionist_id) {
-        return receptionistService.deleteReceptionist(Receptionist_id);
+    @DeleteMapping("delete/{receptionistId}")
+    public String deleteReceptionist(@PathVariable Integer receptionistId) {
+        return receptionistService.deleteReceptionist(receptionistId);
     }
 
 }

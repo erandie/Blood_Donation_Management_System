@@ -16,4 +16,6 @@ public class BloodDTO {
     private String blood_group;
     private Double blood_pints;
     private Date date;
+
+    private Integer bloodBank_id;
 }

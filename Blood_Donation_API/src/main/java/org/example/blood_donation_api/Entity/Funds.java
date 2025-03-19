@@ -1,9 +1,6 @@
 package org.example.blood_donation_api.Entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,5 +17,9 @@ public class Funds {
     private String description;
     private Double amount;
     private String paymentMethode;
+
+    @ManyToOne
+    @JoinColumn (name = "donor_id")
+    private Donor donor;
 
 }

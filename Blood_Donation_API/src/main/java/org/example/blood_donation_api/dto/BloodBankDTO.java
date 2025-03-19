@@ -12,10 +12,16 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 public class BloodBankDTO {
-    private int bloodBank_id;
-    private Date date;
+    private int bloodBankId;
+    private String bloodType;
     private Double points;
 
-    private List<EmployeeDTO> employeeDTOS= new ArrayList<>();
+    private Integer Emp_id;
+
+    /*private List<EmployeeDTO> employeeDTOS = new ArrayList<>();*/
+
+    private ReceptionistDTO receptionistDTO;
+
+    private List<BloodDTO> bloodDTOS = new ArrayList<>();
 
 }

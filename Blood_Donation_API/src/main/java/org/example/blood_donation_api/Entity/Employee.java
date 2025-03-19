@@ -19,7 +19,7 @@ public class Employee {
     private String address;
 
     @ManyToOne
-    @JoinColumn (name = "bloodBank_id")
+    @JoinColumn(name = "bloodBank_id")
     private BloodBank bloodBank;
 
 }

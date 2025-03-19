@@ -15,13 +15,21 @@ import java.util.List;
 @Data
 public class BloodBank {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int bloodBank_id;
-    private Date date;
+    private int bloodBankId;
+    @Enumerated(EnumType.STRING)
+    private BloodTypes bloodType;
     private Double points;
 
-    @OneToMany(cascade =  CascadeType.ALL, mappedBy = "bloodBank")
+    @OneToMany(mappedBy = "bloodBank", cascade =  CascadeType.ALL)
     private List<Employee> employees = new ArrayList<>();
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "receptionist_id", referencedColumnName = "receptionistId")
+    private Receptionist receptionist;
+
+    /*@OneToMany(cascade = CascadeType.ALL, mappedBy = "bloodBank")
+    private List<Blood> bloods = new ArrayList<>();
+*/
 
 
 }

@@ -12,4 +12,6 @@ public class EmployeeDTO {
     private String name;
     private String contact;
     private String address;
+
+    private Integer bloodBank_id;
 }
