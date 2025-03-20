@@ -17,5 +17,5 @@ public class BloodDTO {
     private Double blood_pints;
     private Date date;
 
-    private Integer bloodBank_id;
+    private Integer bloodBankId;
 }

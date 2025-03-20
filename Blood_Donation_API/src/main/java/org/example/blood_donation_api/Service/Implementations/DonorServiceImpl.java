@@ -51,8 +51,8 @@ public class DonorServiceImpl {
         return donorDTO;
     }
 
-    public String deleteDonors(Integer donor_id){
-        donorRepo.deleteById(donor_id);
+    public String deleteDonors(Integer donorId){
+        donorRepo.deleteById(donorId);
         return "Donor details deleted!";
     }
 

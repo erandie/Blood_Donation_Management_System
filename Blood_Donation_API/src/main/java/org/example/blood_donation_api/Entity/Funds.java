@@ -12,14 +12,14 @@ import lombok.NoArgsConstructor;
 public class Funds {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int Fund_id;
+    private int fundId;
 
     private String description;
     private Double amount;
-    private String paymentMethode;
+    private String paymentMethod;
 
     @ManyToOne
-    @JoinColumn (name = "donor_id")
+    @JoinColumn (name = "donorId")
     private Donor donor;
 
 }

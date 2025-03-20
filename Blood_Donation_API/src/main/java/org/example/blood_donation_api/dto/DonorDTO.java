@@ -9,7 +9,7 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 public class DonorDTO {
-    private int Donor_id;
+    private int donorId;
     private String name;
     private String email;
     private String address;

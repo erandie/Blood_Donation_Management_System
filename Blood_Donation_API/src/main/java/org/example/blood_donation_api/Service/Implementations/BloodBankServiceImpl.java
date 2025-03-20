@@ -50,59 +50,15 @@ public class BloodBankServiceImpl {
         return bloodBankDTO;
     }
 
-   /* public BloodBankDTO saveNewBloodsToGroup(BloodBankDTO bloodBankDTO){
-        BloodBank bloodBank = modelMapper.map(bloodBankDTO, BloodBank.class);
-
-        bloodBankRepo.save(bloodBank);
-
-
-
-        *//*for (EmployeeDTO employeeDTO : bloodBankDTO.getEmployeeDTOS()) {
-            Employee employee = modelMapper.map(employeeDTO, Employee.class);
-            employee.setBloodBank(bloodBank); // Set the association to BloodBank
-            employeeRepo.save(employee); // Save employee to DB
-        }*//*
-
-       *//* // Save Blood entities and map back to BloodDTOs
-        for (BloodDTO bloodDTO : bloodBankDTO.getBloodDTOS()){
-            Blood blood = modelMapper.map(bloodDTO, Blood.class);
-            blood.setBloodBank(bloodBank); // Set the association to BloodBank
-            bloodRepo.save(blood); // Save blood to DB
-        }*//*
-
-        BloodBankDTO savedBloodBankDTO = modelMapper.map(bloodBank, BloodBankDTO.class);
-
-        if (bloodBank.getReceptionist() != null) {
-            savedBloodBankDTO.setReceptionistDTO(modelMapper.map(bloodBank.getReceptionist(), ReceptionistDTO.class));
-        } else {
-            savedBloodBankDTO.setReceptionistDTO(null); // Ensure null is set if no receptionist
-        }
-
-        *//*List<EmployeeDTO> employeeDTOS = new ArrayList<>();
-        for (Employee employee : bloodBank.getEmployees()) {
-            employeeDTOS.add(modelMapper.map(employee, EmployeeDTO.class));
-        }
-        savedBloodBankDTO.setEmployeeDTOS(employeeDTOS);*//*
-
-       *//* List<BloodDTO> bloodDTOS = new ArrayList<>();
-        for (Blood blood : bloodBank.getBloods()) {
-            bloodDTOS.add(modelMapper.map(blood, BloodDTO.class));
-        }
-        savedBloodBankDTO.setBloodDTOS(bloodDTOS);*//*
-
-        return savedBloodBankDTO;
-    }*/
-
 
     public BloodBankDTO updateBloodGroupsDetails(BloodBankDTO bloodBankDTO){
         bloodBankRepo.save(modelMapper.map(bloodBankDTO, BloodBank.class));
         return bloodBankDTO;
     }
 
-    public String deleteBloodsFromGroups(Integer bloodBank_id){
-        bloodBankRepo.deleteById(bloodBank_id);
+    public String deleteBloodsFromGroups(Integer bloodBankId){
+        bloodBankRepo.deleteById(bloodBankId);
         return "Bloods deleted!";
     }
-
 
 }

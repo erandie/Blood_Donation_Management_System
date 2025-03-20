@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class Patient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int Patient_id;
+    private int patientId;
     private String name;
     private String email;
     private String address;

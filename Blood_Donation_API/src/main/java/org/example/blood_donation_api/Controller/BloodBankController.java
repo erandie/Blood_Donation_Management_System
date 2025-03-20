@@ -30,9 +30,9 @@ public class BloodBankController {
         return bloodBankService.updateBloodGroupsDetails(bloodBankDTO);
     }
 
-    @DeleteMapping("delete/{bloodBank_id}")
-    public String deleteBloodsFromGroups(@PathVariable Integer bloodBank_id){
-        return bloodBankService.deleteBloodsFromGroups(bloodBank_id);
+    @DeleteMapping("delete/{bloodBankId}")
+    public String deleteBloodsFromGroups(@PathVariable Integer bloodBankId){
+        return bloodBankService.deleteBloodsFromGroups(bloodBankId);
 
     }
 

@@ -13,7 +13,7 @@ import java.util.List;
 public class Donor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int Donor_id;
+    private int donorId;
     private String name;
     private String email;
     private String address;

@@ -30,9 +30,9 @@ public class FundsController {
         return fundsService.updateFunds(fundsDTO);
     }
 
-    @DeleteMapping("delete/{Fund_id}")
-    public String deleteFunds(@PathVariable Integer Fund_id){
-        return fundsService.deleteFunds(Fund_id);
+    @DeleteMapping("delete/{fundId}")
+    public String deleteFunds(@PathVariable Integer fundId){
+        return fundsService.deleteFunds(fundId);
     }
 
 }

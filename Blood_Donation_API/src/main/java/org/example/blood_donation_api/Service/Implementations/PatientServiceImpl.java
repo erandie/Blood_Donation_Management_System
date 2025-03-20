@@ -37,8 +37,8 @@ public class PatientServiceImpl {
         return patientDTO;
     }
 
-    public String deletePatient(Integer Patient_id){
-        patientRepo.deleteById(Patient_id);
+    public String deletePatient(Integer patientId){
+        patientRepo.deleteById(patientId);
         return "Patient Details Deleted!";
     }
 

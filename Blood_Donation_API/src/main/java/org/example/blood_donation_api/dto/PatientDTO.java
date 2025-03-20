@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class PatientDTO {
-    private int Patient_id;
+    private int patientId;
     private String name;
     private String email;
     private String address;

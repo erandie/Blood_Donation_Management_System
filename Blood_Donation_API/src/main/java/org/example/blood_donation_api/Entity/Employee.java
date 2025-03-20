@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int Emp_id;
+    private int empId;
 
     private String name;
     private String contact;

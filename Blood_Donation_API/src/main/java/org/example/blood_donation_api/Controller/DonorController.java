@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/donor")
+@CrossOrigin
 public class DonorController {
 
     @Autowired
@@ -30,9 +31,9 @@ public class DonorController {
         return donorService.updateDonors(donorDTO);
     }
 
-    @DeleteMapping("delete/{donor_id}")
-    public String deleteDonors(@PathVariable Integer donor_id) {
-        donorService.deleteDonors(donor_id);
+    @DeleteMapping("delete/{donorId}")
+    public String deleteDonors(@PathVariable Integer donorId) {
+        donorService.deleteDonors(donorId);
         return "Donor deleted!";
 }
 

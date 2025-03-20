@@ -30,9 +30,9 @@ public class EmployeeController {
         return employeeService.updateEmployee(employeeDTO);
     }
 
-    @DeleteMapping("delete/{Emp_id}")
-    public String deleteEmployee(@PathVariable Integer Emp_id) {
-        return employeeService.deleteEmployee(Emp_id);
+    @DeleteMapping("delete/{empId}")
+    public String deleteEmployee(@PathVariable Integer empId) {
+        return employeeService.deleteEmployee(empId);
     }
 
 }

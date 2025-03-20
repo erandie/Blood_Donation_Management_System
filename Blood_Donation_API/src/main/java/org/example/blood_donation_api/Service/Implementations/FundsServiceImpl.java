@@ -36,8 +36,8 @@ public class FundsServiceImpl {
         return fundsDTO;
     }
 
-    public String deleteFunds(Integer Fund_id) {
-        fundsRepo.deleteById(Fund_id);
+    public String deleteFunds(Integer fundId) {
+        fundsRepo.deleteById(fundId);
         return "Fund Details Delete!";
     }
 

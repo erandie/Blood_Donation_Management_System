@@ -8,10 +8,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class EmployeeDTO {
-    private int Emp_id;
+    private int empId;
     private String name;
     private String contact;
     private String address;
 
-    private Integer bloodBank_id;
+    private Integer bloodBankId;
 }

@@ -30,9 +30,9 @@ public class PatientController {
         return patientService.updatePatients(patientDTO);
     }
 
-    @DeleteMapping("delete/{Patient_id}")
-    public String deletePatient(@PathVariable Integer Patient_id){
-        return patientService.deletePatient(Patient_id);
+    @DeleteMapping("delete/{patientId}")
+    public String deletePatient(@PathVariable Integer patientId){
+        return patientService.deletePatient(patientId);
     }
 
 }

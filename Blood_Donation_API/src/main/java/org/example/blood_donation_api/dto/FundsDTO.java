@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class FundsDTO {
-    private int Fund_id;
+    private int fundId;
     private String description;
     private Double amount;
-    private String paymentMethode;
+    private String paymentMethod;
 }

@@ -36,8 +36,8 @@ public class EmployeeServiceImpl {
         return employeeDTO;
     }
 
-    public String deleteEmployee(Integer Emp_id) {
-        employeeRepo.deleteById(Emp_id);
+    public String deleteEmployee(Integer empId) {
+        employeeRepo.deleteById(empId);
         return "Employee Details Deleted!";
     }
 
