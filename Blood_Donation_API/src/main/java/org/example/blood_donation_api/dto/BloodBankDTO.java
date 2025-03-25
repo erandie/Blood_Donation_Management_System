@@ -17,6 +17,9 @@ public class BloodBankDTO {
     private Double points;
 
     private Integer empId;
+    private Integer patientId;
+
+
 
     /*private List<EmployeeDTO> employeeDTOS = new ArrayList<>();*/
 

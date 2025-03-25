@@ -4,6 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -12,5 +15,9 @@ public class PatientDTO {
     private String name;
     private String email;
     private String address;
+
+    private Integer bloodBankId;
+
+    private List<FundsDTO> fundsDTOS = new ArrayList<>();
 
 }

@@ -14,4 +14,9 @@ public class EmployeeDTO {
     private String address;
 
     private Integer bloodBankId;
+
+    private Integer donationId;
+
 }
+
+

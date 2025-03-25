@@ -23,7 +23,7 @@ public class Funds {
     private Donor donor;
 
     @ManyToOne
-    @JoinColumn(name = "patient_id")
+    @JoinColumn(name = "patientId")
     private Patient patient;
 
 }

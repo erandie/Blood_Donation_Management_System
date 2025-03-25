@@ -24,6 +24,9 @@ public class Patient {
     @JoinColumn(name = "bloodBank_id")
     private BloodBank bloodBank;
 
-    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Funds> funds = new ArrayList<>();
+
+    /*@OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Blood> blood = new ArrayList<>();*/
 }

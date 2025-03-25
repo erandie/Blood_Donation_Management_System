@@ -13,6 +13,9 @@ public class DonorDTO {
     private String name;
     private String email;
     private String address;
+    private String bloodType;
+
+    private Integer donationId;
 
     private List<FundsDTO> fundsDTOS = new ArrayList<>();
 

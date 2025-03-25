@@ -12,4 +12,10 @@ public class FundsDTO {
     private String description;
     private Double amount;
     private String paymentMethod;
+
+    private Integer donorId;
+
+    private Integer patientId;
+
+
 }

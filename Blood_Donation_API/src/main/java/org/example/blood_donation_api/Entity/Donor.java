@@ -17,8 +17,10 @@ public class Donor {
     private String name;
     private String email;
     private String address;
+    @Enumerated(EnumType.STRING)
+    private BloodTypes bloodType;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "donor")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "donor", fetch = FetchType.LAZY)
     private List<Funds> funds = new ArrayList<>();
 
     @ManyToOne
@@ -27,5 +29,8 @@ public class Donor {
 
     @OneToMany(mappedBy = "donor", cascade = CascadeType.ALL)
     private List<Blood> blood = new ArrayList<>();
+
+    @OneToMany(mappedBy = "donor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Donation> donations = new ArrayList<>();
 
 }

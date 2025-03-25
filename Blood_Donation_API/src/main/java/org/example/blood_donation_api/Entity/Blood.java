@@ -28,4 +28,8 @@ public class Blood {
     @JoinColumn(name = "donor_id")
     private Donor donor;
 
+    /*@ManyToOne
+    @JoinColumn(name = "patientId")
+    private Patient patient;*/
+
 }

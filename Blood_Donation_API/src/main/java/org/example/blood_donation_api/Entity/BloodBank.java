@@ -16,8 +16,10 @@ import java.util.List;
 public class BloodBank {
     @Id
     private int bloodBankId;
+
     @Enumerated(EnumType.STRING)
     private BloodTypes bloodType;
+
     private Double points;
 
     @OneToMany(mappedBy = "bloodBank", cascade =  CascadeType.ALL, fetch = FetchType.LAZY)
@@ -33,7 +35,7 @@ public class BloodBank {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "bloodBank")
     private List<Blood> bloods = new ArrayList<>();
 
-    @OneToMany(mappedBy = "bloodBank", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "bloodBank", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Patient> patients = new ArrayList<>();
 
 }
