@@ -22,4 +22,8 @@ public class Funds {
     @JoinColumn (name = "donorId")
     private Donor donor;
 
+    @ManyToOne
+    @JoinColumn(name = "patient_id")
+    private Patient patient;
+
 }

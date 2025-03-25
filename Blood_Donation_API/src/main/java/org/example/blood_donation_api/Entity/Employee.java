@@ -21,5 +21,4 @@ public class Employee {
     @ManyToOne
     @JoinColumn(name = "bloodBank_id")
     private BloodBank bloodBank;
-
 }

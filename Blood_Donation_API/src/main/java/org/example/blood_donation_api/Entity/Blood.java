@@ -3,7 +3,9 @@ package org.example.blood_donation_api.Entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,7 +21,11 @@ public class Blood {
     private Date date;
 
     @ManyToOne
-    @JoinColumn(name = "bloodBank_id_fk")
+    @JoinColumn(name = "bloodBank_id")
     private BloodBank bloodBank;
+
+    @ManyToOne
+    @JoinColumn(name = "donor_id")
+    private Donor donor;
 
 }

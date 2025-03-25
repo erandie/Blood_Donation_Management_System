@@ -21,4 +21,11 @@ public class Donor {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "donor")
     private List<Funds> funds = new ArrayList<>();
 
+    @ManyToOne
+    @JoinColumn(name = "bloodBank_id")
+    private BloodBank bloodBank;
+
+    @OneToMany(mappedBy = "donor", cascade = CascadeType.ALL)
+    private List<Blood> blood = new ArrayList<>();
+
 }

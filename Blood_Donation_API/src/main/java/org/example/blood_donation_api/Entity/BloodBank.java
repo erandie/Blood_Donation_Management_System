@@ -20,16 +20,49 @@ public class BloodBank {
     private BloodTypes bloodType;
     private Double points;
 
-    @OneToMany(mappedBy = "bloodBank", cascade =  CascadeType.ALL)
+    @OneToMany(mappedBy = "bloodBank", cascade =  CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Employee> employees = new ArrayList<>();
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "receptionist_id", referencedColumnName = "receptionistId")
     private Receptionist receptionist;
 
-    /*@OneToMany(cascade = CascadeType.ALL, mappedBy = "bloodBank")
-    private List<Blood> bloods = new ArrayList<>();
-*/
+    @OneToMany(mappedBy = "bloodBank", cascade = CascadeType.ALL)
+    private List<Donor> donors = new ArrayList<>();
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "bloodBank")
+    private List<Blood> bloods = new ArrayList<>();
+
+    @OneToMany(mappedBy = "bloodBank", cascade = CascadeType.ALL)
+    private List<Patient> patients = new ArrayList<>();
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
