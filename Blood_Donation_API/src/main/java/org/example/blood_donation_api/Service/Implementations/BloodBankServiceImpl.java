@@ -9,6 +9,7 @@ import org.example.blood_donation_api.Repo.BloodBankRepo;
 import org.example.blood_donation_api.Repo.BloodRepo;
 import org.example.blood_donation_api.Repo.EmployeeRepo;
 import org.example.blood_donation_api.Repo.ReceptionistRepo;
+import org.example.blood_donation_api.Service.BloodBankService;
 import org.example.blood_donation_api.dto.BloodBankDTO;
 import org.example.blood_donation_api.dto.BloodDTO;
 import org.example.blood_donation_api.dto.EmployeeDTO;
@@ -23,7 +24,7 @@ import java.util.List;
 
 @Service
 @Transactional
-public class BloodBankServiceImpl {
+public class BloodBankServiceImpl implements BloodBankService {
 
     @Autowired
     private BloodBankRepo bloodBankRepo;
@@ -40,22 +41,26 @@ public class BloodBankServiceImpl {
     @Autowired
     private ReceptionistRepo receptionistRepo;
 
+    @Override
     public List<BloodBankDTO> getAllBloodsInGroup(){
         List<BloodBank> bloodBanks = bloodBankRepo.findAll();
         return modelMapper.map(bloodBanks, new TypeToken<List<BloodBankDTO>>(){}.getType());
     }
 
+    @Override
     public BloodBankDTO saveNewBloodsToGroup(BloodBankDTO bloodBankDTO){
         bloodBankRepo.save(modelMapper.map(bloodBankDTO, BloodBank.class));
         return bloodBankDTO;
     }
 
 
+    @Override
     public BloodBankDTO updateBloodGroupsDetails(BloodBankDTO bloodBankDTO){
         bloodBankRepo.save(modelMapper.map(bloodBankDTO, BloodBank.class));
         return bloodBankDTO;
     }
 
+    @Override
     public String deleteBloodsFromGroups(Integer bloodBankId){
         bloodBankRepo.deleteById(bloodBankId);
         return "Bloods deleted!";

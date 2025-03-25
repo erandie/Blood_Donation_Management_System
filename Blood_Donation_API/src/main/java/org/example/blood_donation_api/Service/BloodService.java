@@ -5,11 +5,9 @@ import org.example.blood_donation_api.dto.BloodDTO;
 import java.util.List;
 
 public interface BloodService {
-    public void addBloods(BloodDTO bloodDTO);
+    List<BloodDTO> getAllBloodDetails();
+    BloodDTO saveBloods(BloodDTO bloodDTO);
+    BloodDTO updateBloods(BloodDTO bloodDTO);
+    String deleteBloods(Integer Blood_id);
 
-    public List<BloodDTO> getAllBloods();
-
-    public List<BloodDTO> updateBloods(int Blood_id, BloodDTO bloodDTO);
-
-    public boolean deleteBloods(int Blood_id);
 }

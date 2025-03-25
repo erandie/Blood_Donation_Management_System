@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class DonorServiceImpl {
+public class DonorServiceImpl implements DonorService {
 
     @Autowired
     private DonorRepo donorRepo;
@@ -26,11 +26,13 @@ public class DonorServiceImpl {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Override
     public List<DonorDTO> getAllDonors(){
         List<Donor> donors = donorRepo.findAll();
         return modelMapper.map(donors, new TypeToken<List<DonorDTO>>(){}.getType());
     }
 
+    @Override
     public DonorDTO saveDonor(DonorDTO donorDTO) {
         Donor donor = modelMapper.map(donorDTO, Donor.class);
 
@@ -46,11 +48,13 @@ public class DonorServiceImpl {
 
     }
 
+    @Override
     public DonorDTO updateDonors(DonorDTO donorDTO){
         donorRepo.save(modelMapper.map(donorDTO, Donor.class));
         return donorDTO;
     }
 
+    @Override
     public String deleteDonors(Integer donorId){
         donorRepo.deleteById(donorId);
         return "Donor details deleted!";

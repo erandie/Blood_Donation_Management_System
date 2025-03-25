@@ -15,28 +15,32 @@ import java.util.List;
 @Service
 /*public class BloodServiceImpl implements BloodService {*/
 @Transactional
-public class BloodServiceImpl{
+public class BloodServiceImpl implements BloodService{
 
     @Autowired
     private BloodRepo bloodRepo;
     @Autowired
     private ModelMapper modelMapper;
 
+    @Override
     public List<BloodDTO> getAllBloodDetails(){
         List<Blood> bloodList = bloodRepo.findAll();
         return modelMapper.map(bloodList, new TypeToken<List<BloodDTO>>(){}.getType());
     }
 
+    @Override
     public BloodDTO saveBloods(BloodDTO bloodDTO){
         bloodRepo.save(modelMapper.map(bloodDTO, Blood.class));
         return bloodDTO;
     }
 
+    @Override
     public BloodDTO updateBloods(BloodDTO bloodDTO){
         bloodRepo.save(modelMapper.map(bloodDTO, Blood.class));
         return bloodDTO;
     }
 
+    @Override
     public String deleteBloods(Integer Blood_id){
         bloodRepo.deleteById(Blood_id);
         return "Blood Details Deleted!";
