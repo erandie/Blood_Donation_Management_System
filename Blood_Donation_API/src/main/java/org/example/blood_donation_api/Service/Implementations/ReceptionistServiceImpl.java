@@ -28,21 +28,25 @@ public class ReceptionistServiceImpl implements ReceptionistService {
     }
 
     @Override
-    public ReceptionistDTO saveReceptionist(ReceptionistDTO receptionistDTO) {
+    public void saveReceptionist(ReceptionistDTO receptionistDTO) {
+        if (receptionistRepo.existsById(receptionistDTO.getReceptionistId())){
+            throw new RuntimeException("Receptionist Already Exists");
+        }
         receptionistRepo.save(modelMapper.map(receptionistDTO, Receptionist.class));
-        return receptionistDTO;
     }
 
     @Override
-    public ReceptionistDTO updateReceptionist(ReceptionistDTO receptionistDTO){
+    public void updateReceptionist(ReceptionistDTO receptionistDTO){
+        if (!receptionistRepo.existsById(receptionistDTO.getReceptionistId())){
+            throw new RuntimeException("Receptionist does not Exists");
+        }
         receptionistRepo.save(modelMapper.map(receptionistDTO, Receptionist.class));
-        return receptionistDTO;
+
     }
 
     @Override
-    public String deleteReceptionist(Integer receptionistId) {
+    public void deleteReceptionist(Integer receptionistId) {
         receptionistRepo.deleteById(receptionistId);
-        return "Receptionist Details Deleted!";
     }
 }
 

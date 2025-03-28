@@ -30,21 +30,24 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public PatientDTO savePatients(PatientDTO patientDTO) {
+    public void savePatients(PatientDTO patientDTO) {
+        if (patientRepo.existsById(patientDTO.getPatientId())){
+            throw new RuntimeException("Patient Already Exists!");
+        }
         patientRepo.save(modelMapper.map(patientDTO, Patient.class));
-        return patientDTO;
     }
 
     @Override
-    public PatientDTO updatePatients(PatientDTO patientDTO) {
+    public void updatePatients(PatientDTO patientDTO) {
+        if (!patientRepo.existsById(patientDTO.getPatientId())){
+            throw new RuntimeException("Patient does not Exists!");
+        }
         patientRepo.save(modelMapper.map(patientDTO, Patient.class));
-        return patientDTO;
     }
 
     @Override
-    public String deletePatient(Integer patientId){
+    public void deletePatient(Integer patientId){
         patientRepo.deleteById(patientId);
-        return "Patient Details Deleted!";
     }
 
 

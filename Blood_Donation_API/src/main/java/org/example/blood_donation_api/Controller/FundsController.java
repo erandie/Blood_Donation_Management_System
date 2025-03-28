@@ -1,6 +1,7 @@
 package org.example.blood_donation_api.Controller;
 
 import org.example.blood_donation_api.Service.Implementations.FundsServiceImpl;
+import org.example.blood_donation_api.Util.ResponseUtil;
 import org.example.blood_donation_api.dto.FundsDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -21,18 +22,33 @@ public class FundsController {
     }
 
     @PostMapping("save")
-    public FundsDTO saveFunds(@RequestBody FundsDTO fundsDTO) {
-        return fundsService.saveFunds(fundsDTO);
+    public ResponseUtil saveFunds(@RequestBody FundsDTO fundsDTO) {
+        fundsService.saveFunds(fundsDTO);
+        return new ResponseUtil(
+                201,
+                "Fund Added!",
+                fundsDTO
+        );
     }
 
     @PutMapping("update")
-    public FundsDTO updateFunds(@RequestBody FundsDTO fundsDTO) {
-        return fundsService.updateFunds(fundsDTO);
+    public ResponseUtil updateFunds(@RequestBody FundsDTO fundsDTO) {
+        fundsService.updateFunds(fundsDTO);
+        return new ResponseUtil(
+                200,
+                "Fund Updated!",
+                fundsDTO
+        );
     }
 
     @DeleteMapping("delete/{fundId}")
-    public String deleteFunds(@PathVariable Integer fundId){
-        return fundsService.deleteFunds(fundId);
+    public ResponseUtil deleteFunds(@PathVariable Integer fundId){
+        fundsService.deleteFunds(fundId);
+        return new ResponseUtil(
+                200,
+                "fund Deleted!",
+                null
+        );
     }
 
 }

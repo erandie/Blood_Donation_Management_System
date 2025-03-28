@@ -148,6 +148,7 @@ $(document).ready(function () {
         var col1 = $(this).find('td:eq(1)').text();
         var col2 = $(this).find('td:eq(2)').text();
         var col3 = $(this).find('td:eq(3)').text();
+        var col4 = $(this).find('td:eq(4)').text();
 
         $('#exampleFormControlInput1').val(col0);
         $('#exampleFormControlInput2').val(col1);

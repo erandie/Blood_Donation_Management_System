@@ -22,73 +22,34 @@ public class DonorController {
     }
 
     @PostMapping("save")
-    public DonorDTO saveDonors(@RequestBody DonorDTO donorDTO) {
-        return donorService.saveDonor(donorDTO);
+    public ResponseUtil saveDonors(@RequestBody DonorDTO donorDTO) {
+        donorService.saveDonor(donorDTO);
+        return new ResponseUtil(
+                201,
+                "Donor saved!",
+                donorDTO
+        );
     }
 
     @PutMapping("update")
-    public DonorDTO updateDonors(@RequestBody DonorDTO donorDTO) {
-        return donorService.updateDonors(donorDTO);
+    public ResponseUtil updateDonors(@RequestBody DonorDTO donorDTO) {
+        donorService.updateDonors(donorDTO);
+        return new ResponseUtil(
+                200,
+                "donor updated!",
+                donorDTO
+        );
     }
 
     @DeleteMapping("delete/{donorId}")
-    public String deleteDonors(@PathVariable Integer donorId) {
+    public ResponseUtil deleteDonors(@PathVariable Integer donorId) {
         donorService.deleteDonors(donorId);
-        return "Donor deleted!";
-}
+        return new ResponseUtil(
+                200,
+                "Donor deleted!",
+                null
+        );
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /*@PostMapping("save")
-    public ResponseUtil saveDonor(@RequestBody DonorDTO donorDTO) {
-        donorService.addDonor(donorDTO);
-        return new ResponseUtil(201, "Donor Saved!", null);
     }
-
-    @PutMapping("update")
-    public ResponseUtil updateDonor(@RequestBody DonorDTO donorDTO){
-        donorService.updateDonor(donorDTO);
-        return new ResponseUtil(200, "Donor Updated!", null);
-    }
-
-    @DeleteMapping(path = "delete/{Donor_id}")
-    public ResponseUtil deleteDonor(@PathVariable("Donor_id") int Donor_id) {
-        donorService.deleteDonor(Donor_id);
-        return new ResponseUtil(200, "Donor Deleted!", null);
-    }
-
-    *//*@GetMapping("getAll")
-    public ResponseUtil getAllDonors(){
-        return new ResponseUtil(200, "Donor Liiist!", null);
-    }*//*
-
-    @GetMapping("get")
-    public List<DonorDTO> getAllDonors(){
-        List<DonorDTO> donorDTOS=donorService.getAllDonors();
-        return donorDTOS;
-    }*/
-
 
 }

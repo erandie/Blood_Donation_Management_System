@@ -6,8 +6,8 @@ import java.util.List;
 
 public interface BloodService {
     List<BloodDTO> getAllBloodDetails();
-    BloodDTO saveBloods(BloodDTO bloodDTO);
-    BloodDTO updateBloods(BloodDTO bloodDTO);
-    String deleteBloods(Integer Blood_id);
+    void saveBloods(BloodDTO bloodDTO);
+    void updateBloods(BloodDTO bloodDTO);
+    void deleteBloods(Integer Blood_id);
 
 }

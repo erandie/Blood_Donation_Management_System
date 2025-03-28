@@ -1,6 +1,7 @@
 package org.example.blood_donation_api.Controller;
 
 import org.example.blood_donation_api.Service.Implementations.PatientServiceImpl;
+import org.example.blood_donation_api.Util.ResponseUtil;
 import org.example.blood_donation_api.dto.PatientDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -18,21 +19,37 @@ public class PatientController {
     @GetMapping("get")
     public List<PatientDTO> getAllPatients(){
         return patientService.getAllPatients();
+
     }
 
     @PostMapping("save")
-    public PatientDTO savePatient(@RequestBody PatientDTO patientDTO) {
-        return patientService.savePatients(patientDTO);
+    public ResponseUtil savePatient(@RequestBody PatientDTO patientDTO) {
+        patientService.savePatients(patientDTO);
+        return new ResponseUtil(
+                201,
+                "Patient saved!",
+                patientDTO
+        );
     }
 
     @PutMapping("update")
-    public PatientDTO updatePatient(@RequestBody PatientDTO patientDTO){
-        return patientService.updatePatients(patientDTO);
+    public ResponseUtil updatePatient(@RequestBody PatientDTO patientDTO){
+        patientService.updatePatients(patientDTO);
+        return new ResponseUtil(
+                200,
+                "Patient Updated",
+                patientDTO
+        );
     }
 
     @DeleteMapping("delete/{patientId}")
-    public String deletePatient(@PathVariable Integer patientId){
-        return patientService.deletePatient(patientId);
+    public ResponseUtil deletePatient(@PathVariable Integer patientId){
+        patientService.deletePatient(patientId);
+        return new ResponseUtil(
+                200,
+                "Patient Deleted",
+                null
+        );
     }
 
 }

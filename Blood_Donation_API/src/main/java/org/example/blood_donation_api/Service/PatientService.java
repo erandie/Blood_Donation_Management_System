@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface PatientService {
     List<PatientDTO> getAllPatients();
-    PatientDTO savePatients(PatientDTO patientDTO);
-    PatientDTO updatePatients(PatientDTO patientDTO);
-    String deletePatient(Integer patientId);
+    void savePatients(PatientDTO patientDTO);
+    void updatePatients(PatientDTO patientDTO);
+    void deletePatient(Integer patientId);
 }

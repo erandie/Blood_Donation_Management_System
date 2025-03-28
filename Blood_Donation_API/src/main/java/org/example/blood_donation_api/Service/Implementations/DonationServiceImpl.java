@@ -29,20 +29,25 @@ public class DonationServiceImpl implements DonationService {
     }
 
     @Override
-    public DonationDTO saveDonations(DonationDTO donationDTO) {
+    public void saveDonations(DonationDTO donationDTO) {
+       if (donationRepo.existsById(donationDTO.getDonationId())) {
+           throw new RuntimeException("Donation Already Exists!");
+       }
         donationRepo.save(modelMapper.map(donationDTO, Donation.class));
-        return donationDTO;
     }
 
     @Override
-    public DonationDTO updateDonations(DonationDTO donationDTO) {
+    public void updateDonations(DonationDTO donationDTO) {
+        if (!donationRepo.existsById(donationDTO.getDonationId())) {
+            throw new RuntimeException("Donation does not exist!");
+        }
         donationRepo.save(modelMapper.map(donationDTO, Donation.class));
-        return donationDTO;
     }
+
+
     @Override
-    public String deleteDonations(Integer donationId) {
+    public void deleteDonations(Integer donationId) {
         donationRepo.deleteById(donationId);
-        return "Donation Deleted SuccessFully!";
     }
 
 }

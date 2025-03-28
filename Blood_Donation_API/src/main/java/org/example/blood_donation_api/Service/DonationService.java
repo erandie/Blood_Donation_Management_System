@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface DonationService {
     List<DonationDTO> getAllDonations();
-    DonationDTO saveDonations(DonationDTO donationDTO);
-    DonationDTO updateDonations(DonationDTO donationDTO);
-    String deleteDonations(Integer donationId);
+    void saveDonations(DonationDTO donationDTO);
+    void updateDonations(DonationDTO donationDTO);
+    void deleteDonations(Integer donationId);
 }

@@ -29,21 +29,24 @@ public class FundsServiceImpl implements FundsService {
     }
 
     @Override
-    public FundsDTO saveFunds(FundsDTO fundsDTO) {
+    public void saveFunds(FundsDTO fundsDTO) {
+        if (fundsRepo.existsById(fundsDTO.getFundId())){
+            throw new RuntimeException("Funds Already Exists!");
+        }
         fundsRepo.save(modelMapper.map(fundsDTO, Funds.class));
-        return fundsDTO;
     }
 
     @Override
-    public FundsDTO updateFunds(FundsDTO fundsDTO) {
+    public void updateFunds(FundsDTO fundsDTO) {
+        if (!fundsRepo.existsById(fundsDTO.getFundId())) {
+            throw new RuntimeException("Funds does not Exists!");
+        }
         fundsRepo.save(modelMapper.map(fundsDTO, Funds.class));
-        return fundsDTO;
     }
 
     @Override
-    public String deleteFunds(Integer fundId) {
+    public void deleteFunds(Integer fundId) {
         fundsRepo.deleteById(fundId);
-        return "Fund Details Delete!";
     }
 
 

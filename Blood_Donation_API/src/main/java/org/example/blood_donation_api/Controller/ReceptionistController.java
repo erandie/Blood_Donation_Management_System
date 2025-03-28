@@ -1,6 +1,7 @@
 package org.example.blood_donation_api.Controller;
 
 import org.example.blood_donation_api.Service.Implementations.ReceptionistServiceImpl;
+import org.example.blood_donation_api.Util.ResponseUtil;
 import org.example.blood_donation_api.dto.ReceptionistDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -21,18 +22,33 @@ public class ReceptionistController {
     }
 
     @PostMapping("save")
-    public ReceptionistDTO saveReceptionist(@RequestBody ReceptionistDTO receptionistDTO){
-        return receptionistService.saveReceptionist(receptionistDTO);
+    public ResponseUtil saveReceptionist(@RequestBody ReceptionistDTO receptionistDTO){
+        receptionistService.saveReceptionist(receptionistDTO);
+        return new ResponseUtil(
+                201,
+                "Receptionist Added!",
+                receptionistDTO
+        );
     }
 
     @PutMapping("update")
-    public ReceptionistDTO updateReceptionists(@RequestBody ReceptionistDTO receptionistDTO) {
-        return receptionistService.updateReceptionist(receptionistDTO);
+    public ResponseUtil updateReceptionists(@RequestBody ReceptionistDTO receptionistDTO) {
+        receptionistService.updateReceptionist(receptionistDTO);
+        return new ResponseUtil(
+                200,
+                "Receptionist Updated!",
+                receptionistDTO
+        );
     }
 
     @DeleteMapping("delete/{receptionistId}")
-    public String deleteReceptionist(@PathVariable Integer receptionistId) {
-        return receptionistService.deleteReceptionist(receptionistId);
+    public ResponseUtil deleteReceptionist(@PathVariable Integer receptionistId) {
+        receptionistService.deleteReceptionist(receptionistId);
+        return new ResponseUtil(
+                200,
+                "Receptionist Deleted!",
+                null
+        );
     }
 
 }

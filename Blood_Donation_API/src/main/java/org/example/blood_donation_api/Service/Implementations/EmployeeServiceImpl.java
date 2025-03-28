@@ -29,21 +29,25 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public EmployeeDTO saveEmployee(EmployeeDTO employeeDTO) {
+    public void saveEmployee(EmployeeDTO employeeDTO) {
+        if (employeeRepo.existsById(employeeDTO.getEmpId())){
+            throw new RuntimeException("Employee Already Exists");
+        }
         employeeRepo.save(modelMapper.map(employeeDTO, Employee.class));
-        return employeeDTO;
     }
 
     @Override
-    public EmployeeDTO updateEmployee(EmployeeDTO employeeDTO) {
+    public void updateEmployee(EmployeeDTO employeeDTO) {
+        if (!employeeRepo.existsById(employeeDTO.getEmpId())) {
+            throw new RuntimeException("Employee does not Exist");
+        }
         employeeRepo.save(modelMapper.map(employeeDTO, Employee.class));
-        return employeeDTO;
     }
 
+
     @Override
-    public String deleteEmployee(Integer empId) {
+    public void deleteEmployee(Integer empId) {
         employeeRepo.deleteById(empId);
-        return "Employee Details Deleted!";
     }
 
 }

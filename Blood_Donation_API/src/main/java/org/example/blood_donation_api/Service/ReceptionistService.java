@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface ReceptionistService {
     List<ReceptionistDTO> getAllReceptionistDetails();
-    ReceptionistDTO saveReceptionist(ReceptionistDTO receptionistDTO);
-    ReceptionistDTO updateReceptionist(ReceptionistDTO receptionistDTO);
-    String deleteReceptionist(Integer receptionistId);
+    void saveReceptionist(ReceptionistDTO receptionistDTO);
+    void updateReceptionist(ReceptionistDTO receptionistDTO);
+    void deleteReceptionist(Integer receptionistId);
 }

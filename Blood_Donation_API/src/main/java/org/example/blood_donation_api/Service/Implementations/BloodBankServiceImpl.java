@@ -1,10 +1,7 @@
 package org.example.blood_donation_api.Service.Implementations;
 
 import jakarta.transaction.Transactional;
-import org.example.blood_donation_api.Entity.Blood;
-import org.example.blood_donation_api.Entity.BloodBank;
-import org.example.blood_donation_api.Entity.Employee;
-import org.example.blood_donation_api.Entity.Receptionist;
+import org.example.blood_donation_api.Entity.*;
 import org.example.blood_donation_api.Repo.BloodBankRepo;
 import org.example.blood_donation_api.Repo.BloodRepo;
 import org.example.blood_donation_api.Repo.EmployeeRepo;
@@ -21,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -48,22 +46,72 @@ public class BloodBankServiceImpl implements BloodBankService {
     }
 
     @Override
-    public BloodBankDTO saveNewBloodsToGroup(BloodBankDTO bloodBankDTO){
+    public void saveNewBloodsToGroup(BloodBankDTO bloodBankDTO){
+        if (bloodBankRepo.existsById(bloodBankDTO.getBloodBankId())) {
+            throw new RuntimeException("Blood Bank Already Exists");
+        }
         bloodBankRepo.save(modelMapper.map(bloodBankDTO, BloodBank.class));
-        return bloodBankDTO;
     }
 
 
     @Override
-    public BloodBankDTO updateBloodGroupsDetails(BloodBankDTO bloodBankDTO){
+    public void updateBloodGroupsDetails(BloodBankDTO bloodBankDTO) {
+        if (!bloodBankRepo.existsById(bloodBankDTO.getBloodBankId())) {
+            throw new RuntimeException("Blood Bank does not Exist");
+        }
         bloodBankRepo.save(modelMapper.map(bloodBankDTO, BloodBank.class));
-        return bloodBankDTO;
     }
 
+
     @Override
-    public String deleteBloodsFromGroups(Integer bloodBankId){
+    public void deleteBloodsFromGroups(Integer bloodBankId){
         bloodBankRepo.deleteById(bloodBankId);
-        return "Bloods deleted!";
     }
+
+    public void addBloodPoints(String bloodType, Double points) {
+        // Find existing blood group or create new
+        BloodBank bloodBank = bloodBankRepo.findByBloodType(BloodTypes.valueOf(bloodType))
+                .orElseGet(() -> {
+                    BloodBank newBank = new BloodBank();
+                    newBank.setBloodType(BloodTypes.valueOf(bloodType));
+                    newBank.setPoints(0.0);
+                    return bloodBankRepo.save(newBank);
+                });
+
+        bloodBank.addPoints(points);
+        bloodBankRepo.save(bloodBank);
+    }
+
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

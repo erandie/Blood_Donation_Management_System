@@ -2,6 +2,7 @@ package org.example.blood_donation_api.Controller;
 
 import org.example.blood_donation_api.Service.BloodService;
 import org.example.blood_donation_api.Service.Implementations.BloodServiceImpl;
+import org.example.blood_donation_api.Util.ResponseUtil;
 import org.example.blood_donation_api.dto.BloodDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -22,18 +23,33 @@ public class BloodController {
     }
 
     @PostMapping("save")
-    public BloodDTO saveBloods(@RequestBody BloodDTO bloodDTO){
-        return bloodService.saveBloods(bloodDTO);
+    public ResponseUtil saveBloods(@RequestBody BloodDTO bloodDTO){
+        bloodService.saveBloods(bloodDTO);
+        return new ResponseUtil(
+                201,
+                "Blood Saved!",
+                null
+        );
     }
 
     @PutMapping("update")
-    public BloodDTO updateBloods(@RequestBody BloodDTO bloodDTO){
-        return bloodService.updateBloods(bloodDTO);
+    public ResponseUtil updateBloods(@RequestBody BloodDTO bloodDTO){
+        bloodService.updateBloods(bloodDTO);
+        return new ResponseUtil(
+                200,
+                "Blood Updated!",
+                null
+        );
     }
 
     @DeleteMapping("delete/{Blood_id}")
-    public String deleteBloods(@PathVariable Integer Blood_id) {
-        return bloodService.deleteBloods(Blood_id);
+    public ResponseUtil deleteBloods(@PathVariable Integer Blood_id) {
+        bloodService.deleteBloods(Blood_id);
+        return new ResponseUtil(
+                200,
+                "Blood Deleted!",
+                null
+        );
     }
 
 }

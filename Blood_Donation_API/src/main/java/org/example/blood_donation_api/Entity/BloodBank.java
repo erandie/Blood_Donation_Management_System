@@ -3,8 +3,10 @@ package org.example.blood_donation_api.Entity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Generated;
 import lombok.NoArgsConstructor;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -15,12 +17,17 @@ import java.util.List;
 @Data
 public class BloodBank {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int bloodBankId;
 
     @Enumerated(EnumType.STRING)
     private BloodTypes bloodType;
 
     private Double points;
+
+    public void addPoints(Double pointsToAdd) {
+        this.points += pointsToAdd;
+    }
 
     @OneToMany(mappedBy = "bloodBank", cascade =  CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Employee> employees = new ArrayList<>();

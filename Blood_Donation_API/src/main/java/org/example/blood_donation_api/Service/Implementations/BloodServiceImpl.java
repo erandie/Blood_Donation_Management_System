@@ -13,9 +13,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-/*public class BloodServiceImpl implements BloodService {*/
 @Transactional
-public class BloodServiceImpl implements BloodService{
+public class BloodServiceImpl implements BloodService {
 
     @Autowired
     private BloodRepo bloodRepo;
@@ -23,45 +22,32 @@ public class BloodServiceImpl implements BloodService{
     private ModelMapper modelMapper;
 
     @Override
-    public List<BloodDTO> getAllBloodDetails(){
+    public List<BloodDTO> getAllBloodDetails() {
         List<Blood> bloodList = bloodRepo.findAll();
-        return modelMapper.map(bloodList, new TypeToken<List<BloodDTO>>(){}.getType());
+        return modelMapper.map(bloodList, new TypeToken<List<BloodDTO>>() {
+        }.getType());
     }
 
     @Override
-    public BloodDTO saveBloods(BloodDTO bloodDTO){
+    public void saveBloods(BloodDTO bloodDTO) {
+        if (bloodRepo.existsById(bloodDTO.getBlood_id())) {
+            throw new RuntimeException("Blood Already Exists");
+        }
+
         bloodRepo.save(modelMapper.map(bloodDTO, Blood.class));
-        return bloodDTO;
     }
 
     @Override
-    public BloodDTO updateBloods(BloodDTO bloodDTO){
+    public void updateBloods(BloodDTO bloodDTO) {
+        if (!bloodRepo.existsById(bloodDTO.getBlood_id())) {
+            throw new RuntimeException("Blood does not Exist");
+        }
         bloodRepo.save(modelMapper.map(bloodDTO, Blood.class));
-        return bloodDTO;
     }
 
+
     @Override
-    public String deleteBloods(Integer Blood_id){
+    public void deleteBloods(Integer Blood_id) {
         bloodRepo.deleteById(Blood_id);
-        return "Blood Details Deleted!";
     }
-
-    /*@Override
-    public void addBloods(BloodDTO bloodDTO) {
-    }
-
-    @Override
-    public List<BloodDTO> getAllBloods() {
-        return null;
-    }
-
-    @Override
-    public List<BloodDTO> updateBloods(int Blood_id, BloodDTO bloodDTO) {
-        return null;
-    }
-
-    @Override
-    public boolean deleteBloods(int Blood_id) {
-        return false;
-    }*/
 }

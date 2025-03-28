@@ -27,63 +27,43 @@ public class DonorServiceImpl implements DonorService {
     private ModelMapper modelMapper;
 
     @Override
-    public List<DonorDTO> getAllDonors(){
+    public List<DonorDTO> getAllDonors() {
         List<Donor> donors = donorRepo.findAll();
-        return modelMapper.map(donors, new TypeToken<List<DonorDTO>>(){}.getType());
+        return modelMapper.map(donors, new TypeToken<List<DonorDTO>>() {
+        }.getType());
     }
 
     @Override
-    public DonorDTO saveDonor(DonorDTO donorDTO) {
-        Donor donor = modelMapper.map(donorDTO, Donor.class);
+    public void saveDonor(DonorDTO donorDTO) {
+        if (donorRepo.existsById(donorDTO.getDonorId())){
+            throw new RuntimeException("Donor Already Exists!");
+        }
+        donorRepo.save(modelMapper.map(donorDTO, Donor.class));
 
-        donorRepo.save(donor);
+       /* donorRepo.save(donor);*/
 
-        for (FundsDTO fundsDTO : donorDTO.getFundsDTOS()) {
+       /* for (FundsDTO fundsDTO : donorDTO.getFundsDTOS()) {
             Funds funds = modelMapper.map(fundsDTO, Funds.class);
             funds.setDonor(donor);
             fundsRepo.save(funds);
-        }
+        }*/
 
-        return donorDTO;
 
     }
 
     @Override
-    public DonorDTO updateDonors(DonorDTO donorDTO){
+    public void updateDonors(DonorDTO donorDTO) {
+        if (!donorRepo.existsById(donorDTO.getDonorId())) {
+            throw new RuntimeException("Donor does not exist!");
+        }
         donorRepo.save(modelMapper.map(donorDTO, Donor.class));
-        return donorDTO;
     }
 
     @Override
-    public String deleteDonors(Integer donorId){
+    public void deleteDonors(Integer donorId) {
         donorRepo.deleteById(donorId);
-        return "Donor details deleted!";
     }
 
-   /* @Override
-    public void addDonor(DonorDTO donorDTO) {
-        if (donorRepo.existsById(donorDTO.getDonor_id())) {
-            throw new RuntimeException("Donor Already Exists!");
-        }
-    }
-
-    @Override
-    public void updateDonor(DonorDTO donorDTO) {
-        if (donorRepo.existsById(donorDTO.getDonor_id())) {
-            donorRepo.save(modelMapper.map(donorDTO, Donor.class));
-        }
-    }
-
-    @Override
-    public void deleteDonor(int Donor_id) {
-        donorRepo.deleteById(Donor_id);
-    }
-
-    @Override
-    public List<DonorDTO> getAllDonors() {
-        return modelMapper.map(donorRepo.findAll(),
-                new TypeToken<List<DonorDTO>>() {}.getType());
-    }*/
 }
 
 

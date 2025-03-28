@@ -7,7 +7,7 @@ import java.util.List;
 public interface BloodBankService {
 
     List<BloodBankDTO> getAllBloodsInGroup();
-    BloodBankDTO saveNewBloodsToGroup(BloodBankDTO bloodBankDTO);
-    BloodBankDTO updateBloodGroupsDetails(BloodBankDTO bloodBankDTO);
-    String deleteBloodsFromGroups(Integer bloodBankId);
+    void saveNewBloodsToGroup(BloodBankDTO bloodBankDTO);
+    void updateBloodGroupsDetails(BloodBankDTO bloodBankDTO);
+    void deleteBloodsFromGroups(Integer bloodBankId);
 }

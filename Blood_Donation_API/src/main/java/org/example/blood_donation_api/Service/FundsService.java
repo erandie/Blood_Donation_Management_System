@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface FundsService {
     List<FundsDTO> getAllFunds();
-    FundsDTO saveFunds(FundsDTO fundsDTO);
-    FundsDTO updateFunds(FundsDTO fundsDTO);
-    String deleteFunds(Integer fundId);
+    void saveFunds(FundsDTO fundsDTO);
+    void updateFunds(FundsDTO fundsDTO);
+    void deleteFunds(Integer fundId);
 }

@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood Donation - User Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="user-styles.css">
+</head>
+
+<style>
+    /* Global Styles */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+        background: #f5f6fa;
+    }
+
+    /* User Dashboard Layout */
+    .user-dashboard {
+        display: flex;
+        min-height: 100vh;
+    }
+
+    /* Sidebar Styles (Reused from Admin with slight modifications) */
+    .sidebar {
+        width: 250px;
+        background: #2c3e50;
+        color: #fff;
+        transition: all 0.3s;
+    }
+
+    .logo {
+        display: flex;
+        align-items: center;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+
+    .blood-icon {
+        font-size: 24px;
+        margin-right: 10px;
+        color: #e74c3c;
+    }
+
+    .logo h2 {
+        font-size: 20px;
+        font-weight: 700;
+    }
+
+    .logo h2 span {
+        color: #e74c3c;
+    }
+
+    .menu {
+        list-style: none;
+        padding: 0 15px;
+    }
+
+    .menu li {
+        margin-bottom: 10px;
+        border-radius: 5px;
+        transition: all 0.3s;
+    }
+
+    .menu li:hover {
+        background: #34495e;
+    }
+
+    .menu li.active {
+        background: #e74c3c;
+    }
+
+    .menu li a {
+        display: flex;
+        align-items: center;
+        padding: 12px 15px;
+        color: #fff;
+        text-decoration: none;
+    }
+
+    .menu li a i {
+        margin-right: 10px;
+    }
+
+    /* Main Content Styles */
+    .main-content {
+        flex: 1;
+        padding: 20px;
+    }
+
+    /* Top Navigation */
+    .top-nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+    }
+
+    .welcome h2 {
+        font-size: 24px;
+        color: #2c3e50;
+    }
+
+    .welcome h2 span {
+        color: #e74c3c;
+    }
+
+    .welcome p {
+        color: #7f8c8d;
+        font-size: 14px;
+    }
+
+    .welcome p span {
+        font-weight: 600;
+        color: #2c3e50;
+    }
+
+    .user-actions {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .donate-btn {
+        background: #e74c3c;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 600;
+        transition: background 0.3s;
+    }
+
+    .donate-btn:hover {
+        background: #c0392b;
+    }
+
+    .notifications {
+        position: relative;
+        cursor: pointer;
+    }
+
+    .notifications .badge {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        background: #e74c3c;
+        color: white;
+        border-radius: 50%;
+        width: 18px;
+        height: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+    }
+
+    .user-profile img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    /* Stats Cards */
+    .stats-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+
+    .stat-card {
+        background: #fff;
+        border-radius: 10px;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .stat-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: 20px;
+        margin-right: 15px;
+    }
+
+    .stat-info h3 {
+        font-size: 16px;
+        color: #7f8c8d;
+        margin-bottom: 5px;
+    }
+
+    .stat-info p {
+        font-size: 24px;
+        font-weight: 700;
+        color: #2c3e50;
+    }
+
+    /* Dashboard Sections */
+    .dashboard-sections {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+
+    .recent-activity, .blood-requests {
+        background: #fff;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .recent-activity h3, .blood-requests h3 {
+        margin-bottom: 20px;
+        color: #2c3e50;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .activity-list {
+        list-style: none;
+    }
+
+    .activity-list li {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 12px 0;
+        border-bottom: 1px solid #eee;
+    }
+
+    .activity-list li:last-child {
+        border-bottom: none;
+    }
+
+    .activity-list li i {
+        font-size: 20px;
+    }
+
+    .activity-list li i.completed {
+        color: #1dd1a1;
+    }
+
+    .activity-list li i.pending {
+        color: #feca57;
+    }
+
+    .activity-list li i.notification {
+        color: #e74c3c;
+    }
+
+    .activity-list li p {
+        font-weight: 500;
+        color: #2c3e50;
+    }
+
+    .activity-list li p span {
+        font-weight: 600;
+    }
+
+    .activity-list li small {
+        color: #7f8c8d;
+        font-size: 12px;
+    }
+
+    /* Blood Request Cards */
+    .request-card {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 15px;
+        border-radius: 8px;
+        background: #f8f9fa;
+        margin-bottom: 15px;
+    }
+
+    .blood-type {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 700;
+    }
+
+    .request-details {
+        flex: 1;
+    }
+
+    .request-details h4 {
+        color: #2c3e50;
+        margin-bottom: 5px;
+    }
+
+    .request-details p {
+        color: #7f8c8d;
+        font-size: 14px;
+        margin-bottom: 5px;
+    }
+
+    .request-details small {
+        color: #7f8c8d;
+        font-size: 12px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .respond-btn {
+        background: #e74c3c;
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background 0.3s;
+    }
+
+    .respond-btn:hover {
+        background: #c0392b;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 992px) {
+        .dashboard-sections {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .sidebar {
+            width: 80px;
+        }
+        .logo h2, .menu li a span {
+            display: none;
+        }
+        .menu li a {
+            justify-content: center;
+        }
+        .menu li a i {
+            margin-right: 0;
+        }
+        .top-nav {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 15px;
+        }
+        .user-actions {
+            width: 100%;
+            justify-content: space-between;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .stats-cards {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<body>
+<div class="user-dashboard">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <i class="fas fa-tint blood-icon"></i>
+            <h2>Blood<span>Donor</span></h2>
+        </div>
+        <ul class="menu">
+            <li class="active"><a href="#"><i class="fas fa-home"></i> Dashboard</a></li>
+            <li><a href="#"><i class="fas fa-history"></i> Donation History</a></li>
+            <li><a href="#"><i class="fas fa-calendar-alt"></i> Book Appointment</a></li>
+            <li><a href="#"><i class="fas fa-heartbeat"></i> Blood Requests</a></li>
+            <li><a href="userProfile.html"><i class="fas fa-user"></i> Profile</a></li>
+            <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Top Navigation -->
+        <div class="top-nav">
+            <div class="welcome">
+                <h2>Welcome, <span>John Doe</span></h2>
+                <p>Last donation: <span>10 May 2024</span></p>
+            </div>
+            <div class="user-actions">
+                <button class="btn donate-btn"><i class="fas fa-heart"></i> Donate Now</button>
+                <div class="notifications">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge">3</span>
+                </div>
+                <div class="user-profile">
+                    <img src="https://via.placeholder.com/40" alt="User">
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="stats-cards">
+            <div class="stat-card">
+                <div class="stat-icon" style="background: #ff6b6b;">
+                    <i class="fas fa-tint"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>Total Donations</h3>
+                    <p>5</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background: #48dbfb;">
+                    <i class="fas fa-calendar-check"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>Upcoming Appointments</h3>
+                    <p>1</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background: #1dd1a1;">
+                    <i class="fas fa-heart"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>Lives Saved</h3>
+                    <p>15</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity & Blood Request -->
+        <div class="dashboard-sections">
+            <!-- Recent Activity -->
+            <div class="recent-activity">
+                <h3><i class="fas fa-history"></i> Recent Activity</h3>
+                <ul class="activity-list">
+                    <li>
+                        <i class="fas fa-check-circle completed"></i>
+                        <div>
+                            <p>Donation on <span>10 May 2024</span></p>
+                            <small>Blood Type: O+ | 450ml</small>
+                        </div>
+                    </li>
+                    <li>
+                        <i class="fas fa-clock pending"></i>
+                        <div>
+                            <p>Appointment scheduled for <span>25 May 2024</span></p>
+                            <small>City Hospital, 10:00 AM</small>
+                        </div>
+                    </li>
+                    <li>
+                        <i class="fas fa-bell notification"></i>
+                        <div>
+                            <p>New blood request in your area</p>
+                            <small>Blood Type: O+ | Urgent</small>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Blood Requests -->
+            <div class="blood-requests">
+                <h3><i class="fas fa-heartbeat"></i> Urgent Requests</h3>
+                <div class="request-card">
+                    <div class="blood-type" style="background: #e74c3c;">O+</div>
+                    <div class="request-details">
+                        <h4>Emergency Need</h4>
+                        <p>City General Hospital</p>
+                        <small><i class="fas fa-map-marker-alt"></i> 5km away | Posted: 2 hours ago</small>
+                    </div>
+                    <button class="btn respond-btn">Respond</button>
+                </div>
+                <div class="request-card">
+                    <div class="blood-type" style="background: #3498db;">A-</div>
+                    <div class="request-details">
+                        <h4>Surgery Requirement</h4>
+                        <p>Central Medical</p>
+                        <small><i class="fas fa-map-marker-alt"></i> 8km away | Posted: 1 day ago</small>
+                    </div>
+                    <button class="btn respond-btn">Respond</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
