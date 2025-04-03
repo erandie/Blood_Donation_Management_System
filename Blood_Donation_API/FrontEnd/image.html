@@ -1,0 +1,57 @@
+<form id="userForm" enctype="multipart/form-data">
+    <input type="text" id="name" placeholder="Name" required><br>
+    <input type="text" id="address" placeholder="Address" required><br>
+    <input type="text" id="contact" placeholder="Contact" required><br>
+    <input type="file" id="image" required><br>
+    <button type="submit">Register User</button>
+</form>
+
+<!-- Display Image -->
+<img id="userImage" src="" alt="User Image" style="display:none;" />
+
+<script>
+    $(document).ready(function() {
+        // Form submission for user registration 
+        $('#userForm').submit(function(event) {
+            event.preventDefault();
+
+            var formData = new FormData();
+            formData.append("name", $('#name').val());
+            formData.append("address", $('#address').val());
+            formData.append("contact", $('#contact').val());
+            formData.append("image", $('#image')[0].files[0]);
+
+            $.ajax({
+                url: "http://localhost:8080/api/v1/user/register",
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    alert(response);
+                },
+                error: function(xhr, exception) {
+                    alert("Error uploading user details!");
+                }
+            });
+        });
+
+        // Load user image
+        function loadUserImage(userId) {
+            $.ajax({
+                url: "http://localhost:8080/api/v1/user/image/" + userId,
+                method: "GET",
+                success: function(response) {
+                    var imageUrl = "data:image/jpeg;base64," + btoa(String.fromCharCode.apply(null, response));
+                    $('#userImage').attr("src", imageUrl).show();
+                },
+                error: function(xhr, exception) {
+                    alert("Error loading user image!");
+                }
+            });
+        }
+
+        // Example: Load image for user with ID 1
+        loadUserImage(1);
+    });
+</script>

@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood Donation System - Admin Dashboard</title>
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+</head>
+
+<style>
+    /* Base Styles */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Montserrat', sans-serif;
+    }
+
+    body {
+        background-color: #f8f9fa;
+        color: #333;
+        overflow-x: hidden;
+    }
+
+    .dashboard-container {
+        display: flex;
+        min-height: 100vh;
+    }
+
+    /* Navigation Bar */
+    .nav-bar {
+        width: 250px;
+        background-color: #c62828;
+        color: white;
+        padding: 20px 0;
+        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+        z-index: 100;
+    }
+
+    .logo {
+        font-size: 24px;
+        font-weight: 600;
+        text-align: center;
+        margin-bottom: 30px;
+        padding: 0 20px;
+    }
+
+    .nav-menu {
+        list-style: none;
+    }
+
+    .nav-link {
+        display: block;
+        padding: 15px 25px;
+        color: white;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        border-left: 4px solid transparent;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .nav-link:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        border-left: 4px solid rgba(255, 255, 255, 0.5);
+    }
+
+    .nav-link.active {
+        background-color: rgba(255, 255, 255, 0.2);
+        border-left: 4px solid white;
+    }
+
+    /* 3D Cube Scene */
+    .cube-scene {
+        flex: 1;
+        padding: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        perspective: 1200px;
+        overflow: hidden;
+        background-color: #f0f2f5;
+    }
+
+    .cube {
+        position: relative;
+        width: 500px;
+        height: 500px;
+        transform-style: preserve-3d;
+        transition: transform 1s cubic-bezier(0.25, 0.1, 0.25, 1);
+        transform: translateZ(-250px);
+    }
+
+    .cube-face {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 5px 30px rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        backface-visibility: visible;
+        overflow: hidden;
+    }
+
+    .face-content {
+        padding: 30px;
+        text-align: center;
+        width: 100%;
+    }
+
+    .cube-face h3 {
+        font-size: 20px;
+        margin-bottom: 15px;
+        color: #c62828;
+        font-weight: 600;
+    }
+
+    .cube-tags {
+        font-size: 13px;
+        color: #666;
+        margin-bottom: 25px;
+        font-weight: 500;
+    }
+
+    .cube-metrics {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        width: 100%;
+    }
+
+    .metric {
+        background: #ffebee;
+        padding: 12px;
+        border-radius: 6px;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .metric-label {
+        font-size: 13px;
+        color: #c62828;
+        font-weight: 500;
+    }
+
+    .metric-value {
+        font-size: 14px;
+        font-weight: 600;
+        color: #333;
+    }
+
+    /* Cube Face Positions */
+    .cube-front  { transform: rotateY(0deg) translateZ(250px); }
+    .cube-right  { transform: rotateY(90deg) translateZ(250px); }
+    .cube-left   { transform: rotateY(-90deg) translateZ(250px); }
+    .cube-back   { transform: rotateY(180deg) translateZ(250px); }
+    .cube-top    { transform: rotateX(90deg) translateZ(250px); }
+    .cube-bottom { transform: rotateX(-90deg) translateZ(250px); }
+
+    /* Responsive Design */
+    @media (max-width: 992px) {
+        .cube {
+            width: 250px;
+            height: 250px;
+        }
+
+        .face-content {
+            padding: 20px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .dashboard-container {
+            flex-direction: column;
+        }
+
+        .nav-bar {
+            width: 100%;
+            height: auto;
+        }
+
+        .cube-scene {
+            padding: 20px;
+            perspective: none;
+            height: 400px;
+        }
+
+        .cube {
+            transform-style: flat;
+            height: 350px;
+        }
+
+        .cube-face {
+            position: relative;
+            transform: none !important;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .cube-face.active {
+            display: flex;
+        }
+    }
+</style>
+
+<body>
+<div class="dashboard-container">
+    <!-- Left Navigation Bar -->
+    <div class="nav-bar">
+        <div class="logo">BloodDonation</div>
+        <ul class="nav-menu">
+            <li><a href="#" class="nav-link active" data-panel="dashboard">Dashboard</a></li>
+            <li><a href="#" class="nav-link" data-panel="donor">Donor Management</a></li>
+            <li><a href="#" class="nav-link" data-panel="employee">Employee Management</a></li>
+            <li><a href="#" class="nav-link" data-panel="patient">Patient Management</a></li>
+            <li><a href="#" class="nav-link" data-panel="blood">Blood Inventory</a></li>
+            <li><a href="#" class="nav-link" data-panel="bank">Blood Bank</a></li>
+        </ul>
+    </div>
+
+    <!-- 3D Cube Container -->
+    <div class="cube-scene">
+        <div class="cube">
+            <!-- Front Face - Dashboard -->
+            <div class="cube-face cube-front">
+                <div class="face-content">
+                    <h3>Dashboard Overview</h3>
+                    <div class="cube-tags">#Statistics #Analytics #Overview</div>
+                    <div class="cube-metrics">
+                        <div class="metric">
+                            <span class="metric-label">Active Donors</span>
+                            <span class="metric-value">1,245</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">This Month</span>
+                            <span class="metric-value">+5.2%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Face - Donor Management -->
+            <div class="cube-face cube-right">
+                <div class="face-content">
+                    <h3>Donor Management</h3>
+                    <div class="cube-tags">#Volunteers #BloodType #Screening</div>
+                    <div class="cube-metrics">
+                        <div class="metric">
+                            <span class="metric-label">Total Donors</span>
+                            <span class="metric-value">2,587</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">New This Week</span>
+                            <span class="metric-value">34</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Left Face - Employee Management -->
+            <div class="cube-face cube-left">
+                <div class="face-content">
+                    <h3>Employee Management</h3>
+                    <div class="cube-tags">#Staff #HR #Training</div>
+                    <div class="cube-metrics">
+                        <div class="metric">
+                            <span class="metric-label">Total Staff</span>
+                            <span class="metric-value">58</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Turnover</span>
+                            <span class="metric-value">5.2%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Back Face - Patient Management -->
+            <div class="cube-face cube-back">
+                <div class="face-content">
+                    <h3>Patient Management</h3>
+                    <div class="cube-tags">#Recipients #Requests #Matching</div>
+                    <div class="cube-metrics">
+                        <div class="metric">
+                            <span class="metric-label">Active Cases</span>
+                            <span class="metric-value">127</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Urgent</span>
+                            <span class="metric-value">23</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Top Face - Blood Inventory -->
+            <div class="cube-face cube-top">
+                <div class="face-content">
+                    <h3>Blood Inventory</h3>
+                    <div class="cube-tags">#Storage #Types #Availability</div>
+                    <div class="cube-metrics">
+                        <div class="metric">
+                            <span class="metric-label">Total Units</span>
+                            <span class="metric-value">543</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Critical Low</span>
+                            <span class="metric-value">O-</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Face - Blood Bank -->
+            <div class="cube-face cube-bottom">
+                <div class="face-content">
+                    <h3>Blood Bank</h3>
+                    <div class="cube-tags">#Locations #Logistics #Centers</div>
+                    <div class="cube-metrics">
+                        <div class="metric">
+                            <span class="metric-label">Facilities</span>
+                            <span class="metric-value">12</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Mobile Units</span>
+                            <span class="metric-value">5</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/js/dashboard.js"></script>
+<script src="FrontEnd/js/jquery-3.7.1.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const cube = document.querySelector('.cube');
+        const navLinks = document.querySelectorAll('.nav-link');
+        const cubeFaces = document.querySelectorAll('.cube-face');
+
+        // Map panel names to cube rotations
+        const panelRotations = {
+            'dashboard': 'rotateY(0deg)',
+            'donor': 'rotateY(-90deg)',
+            'employee': 'rotateY(90deg)',
+            'patient': 'rotateY(180deg)',
+            'blood': 'rotateX(-90deg)',
+            /*'blood': 'rotateX(-90deg) rotateZ(90deg)',*/
+            'bank': 'rotateX(90deg)'
+        };
+
+        // Handle navigation clicks
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+
+                // Get the target panel
+                const panel = this.getAttribute('data-panel');
+
+                // Update active nav link
+                navLinks.forEach(nav => nav.classList.remove('active'));
+                this.classList.add('active');
+
+                // Apply the 3D rotation
+                cube.style.transform = `translateZ(-150px) ${panelRotations[panel]}`;
+
+                // For mobile view (where 3D is disabled)
+                if (window.innerWidth <= 768) {
+                    cubeFaces.forEach(face => {
+                        face.classList.remove('active');
+                    });
+                    document.querySelector(`.cube-${panel}`).classList.add('active');
+                }
+            });
+        });
+
+        // Auto-rotation (optional - uncomment to enable)
+        /*
+        let currentPanel = 0;
+        const panels = ['dashboard', 'donor', 'employee', 'patient', 'blood', 'bank'];
+
+        function autoRotate() {
+            currentPanel = (currentPanel + 1) % panels.length;
+            const panel = panels[currentPanel];
+            cube.style.transform = `translateZ(-150px) ${panelRotations[panel]}`;
+
+            // Update active nav link
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('data-panel') === panel) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        // Start auto-rotation every 5 seconds
+        setInterval(autoRotate, 5000);
+        */
+
+        // Handle window resize
+        window.addEventListener('resize', function() {
+            if (window.innerWidth <= 768) {
+                // Disable 3D on small screens
+                cube.style.transform = 'none';
+                cubeFaces.forEach(face => {
+                    face.style.transform = 'none';
+                });
+
+                // Show only the active panel
+                const activePanel = document.querySelector('.nav-link.active').getAttribute('data-panel');
+                cubeFaces.forEach(face => {
+                    face.classList.remove('active');
+                });
+                document.querySelector(`.cube-${activePanel}`).classList.add('active');
+            } else {
+                // Re-enable 3D on larger screens
+                const activePanel = document.querySelector('.nav-link.active').getAttribute('data-panel');
+                cube.style.transform = `translateZ(-150px) ${panelRotations[activePanel]}`;
+                cubeFaces.forEach(face => {
+                    face.style.display = 'flex';
+                });
+            }
+        });
+
+        // Initialize for mobile if needed
+        if (window.innerWidth <= 768) {
+            cube.style.transform = 'none';
+            document.querySelector('.cube-front').classList.add('active');
+        }
+    });
+</script>
+</body>
+</html>
