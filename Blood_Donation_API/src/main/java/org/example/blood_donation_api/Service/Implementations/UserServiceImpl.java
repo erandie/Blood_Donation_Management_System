@@ -68,4 +68,38 @@ public class UserServiceImpl implements UserService {
         return modelMapper.map(user, UserDTO.class);
     }
 
+    public User updateStatusStatus(Integer userId, boolean active){
+        User user = userRepo.findByUserId(userId).orElseThrow(() -> new RuntimeException("User Not Found"));
+
+        user.setActive(active);
+        return userRepo.save(user);
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

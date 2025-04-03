@@ -50,6 +50,10 @@ public class DonationServiceImpl implements DonationService {
         donationRepo.deleteById(donationId);
     }
 
+    public long getDonationCount(){
+        return donationRepo.count();
+    }
+
 }
 
 

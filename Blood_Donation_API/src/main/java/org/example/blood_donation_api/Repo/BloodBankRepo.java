@@ -9,5 +9,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface BloodBankRepo extends JpaRepository<BloodBank, Integer> {
-    Optional<BloodBank> findByBloodType(BloodTypes bloodType);
+    Optional<BloodBank> findFirstByBloodType(BloodTypes bloodType);
+    @Query("SELECT SUM(b.points) FROM BloodBank b")
+    double getTotalBloodStock();
+
 }

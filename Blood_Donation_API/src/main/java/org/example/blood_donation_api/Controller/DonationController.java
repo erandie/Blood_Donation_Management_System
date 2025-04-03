@@ -53,4 +53,14 @@ public class DonationController {
 
     }
 
+    @GetMapping("donationCount")
+    public ResponseUtil getTotalDonations(){
+        long count = donationService.getDonationCount();
+        return new ResponseUtil(
+                200,
+                "Donation Count",
+                count
+        );
+    }
+
 }

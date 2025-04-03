@@ -1,9 +1,11 @@
 package org.example.blood_donation_api.Controller;
 
+import org.example.blood_donation_api.Entity.User;
 import org.example.blood_donation_api.Service.Implementations.UserServiceImpl;
 import org.example.blood_donation_api.Util.ResponseUtil;
 import org.example.blood_donation_api.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -67,5 +69,45 @@ public class UserController {
         );
     }
 
+    public ResponseEntity<String> updateUserStatus(@PathVariable Integer userId, @RequestBody UserDTO userDTO) {
+        User updateUser = userService.updateStatusStatus(userId, userDTO.isActive());
+        String status = updateUser.isActive() ? "activated" : "deactivated";
+        return ResponseEntity.ok("User : " + status + " successfully.");
+    }
+
+
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

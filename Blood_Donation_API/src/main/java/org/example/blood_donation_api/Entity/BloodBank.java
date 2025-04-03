@@ -17,7 +17,7 @@ import java.util.List;
 @Data
 public class BloodBank {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int bloodBankId;
 
     @Enumerated(EnumType.STRING)
@@ -25,9 +25,6 @@ public class BloodBank {
 
     private Double points;
 
-    public void addPoints(Double pointsToAdd) {
-        this.points += pointsToAdd;
-    }
 
     @OneToMany(mappedBy = "bloodBank", cascade =  CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Employee> employees = new ArrayList<>();

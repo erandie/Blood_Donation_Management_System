@@ -10,4 +10,6 @@ public interface BloodBankService {
     void saveNewBloodsToGroup(BloodBankDTO bloodBankDTO);
     void updateBloodGroupsDetails(BloodBankDTO bloodBankDTO);
     void deleteBloodsFromGroups(Integer bloodBankId);
+
+    void addBloodPoints(String bloodType, Double points);
 }

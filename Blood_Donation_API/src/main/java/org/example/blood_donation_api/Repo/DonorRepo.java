@@ -6,4 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface DonorRepo extends JpaRepository<Donor, Integer> {
+    long count();
+
+
 }

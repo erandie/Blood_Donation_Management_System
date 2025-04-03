@@ -24,4 +24,6 @@ public class User {
     private String password;
     private String profileImagePath;
 
+    private boolean active = true;
+
 }

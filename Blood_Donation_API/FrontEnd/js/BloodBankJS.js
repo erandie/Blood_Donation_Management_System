@@ -1,7 +1,6 @@
 $(document).ready(function () {
     loadBloodTypes();
 });
-
 function loadBloodTypes() {
     $.ajax({
         url: "http://localhost:8080/api/v1/bloodTypes/get",
@@ -9,6 +8,7 @@ function loadBloodTypes() {
         success: function (bloodTypes) {
             const bloodTypeSelect = $("#select-bloodType");
             bloodTypeSelect.empty();
+            bloodTypeSelect.append('<option value="">Select Blood Type</option>');
 
             bloodTypes.forEach(bloodType => {
                 bloodTypeSelect.append(`<option value="${bloodType}">${bloodType.replace("_", " ")}</option>`);
@@ -20,43 +20,78 @@ function loadBloodTypes() {
     });
 }
 
+function getAllDetails() {
+    $.ajax({
+        method: "GET",
+        url: "http://localhost:8080/api/v1/bloodBank/get",
+        success: function (data) {
+            let tableBody = $("#bloodBankTable");
+            tableBody.empty();
 
-function saveDetails(){
+            const bloodGroups = {};
+            data.forEach(bloodBank => {
+                if (!bloodGroups[bloodBank.bloodType]) {
+                    bloodGroups[bloodBank.bloodType] = { points: 0, bloodBankId: bloodBank.bloodBankId };
+                }
+                bloodGroups[bloodBank.bloodType].points += bloodBank.points;
+            });
+
+            Object.entries(bloodGroups).forEach(([bloodType, { points, bloodBankId }]) => {
+                tableBody.append(`
+                    <tr>
+                        <td>${bloodBankId}</td>
+                        <td>${bloodType}</td>
+                        <td>${points}</td>
+                    </tr>
+                `);
+            });
+        },
+        error: function () {
+            alert("Error!");
+        }
+    });
+}
+
+function saveDetails() {
     let bloodBankId = parseInt($('#exampleFormControlInput9').val());
     let bloodType = $("#select-bloodType").val();
     let points = parseFloat($('#exampleFormControlInput10').val());
 
+    if (!bloodType || isNaN(points)) {
+        alert("Please select blood type and enter valid points!");
+        return;
+    }
+
     $.ajax({
         method: "POST",
-        contentType:"application/json",
-        url:"http://localhost:8080/api/v1/bloodBank/save",
-        async:true,
-        data:JSON.stringify({
-            "bloodBankId":bloodBankId,
+        contentType: "application/json",
+        url: "http://localhost:8080/api/v1/bloodBank/add-points",
+        data: JSON.stringify({
+            "bloodBankId": bloodBankId,
             "bloodType": bloodType,
-            "points":points
+            "points": points
         }),
-
-        success:function (){
-            alert("Saved!")
+        success: function () {
+            alert("Saved!");
             getAllDetails();
-            $("#exampleFormControlInput9").val("");
-            $("#select-bloodType").val("");
-            $("#exampleFormControlInput10").val("");
+            clearForm();
         },
-
-        error: function (xhr, exception) {
-            alert("Error!")
+        error: function () {
+            alert("Error!");
         }
-
-    })
-
+    });
 }
+
 
 function updateDetails(){
     let bloodBankId = $('#exampleFormControlInput9').val();
     let bloodType = $("#select-bloodType").val();
     let points = $('#exampleFormControlInput10').val();
+
+    if (!bloodBankId || !bloodType || !points) {
+        alert("Please select a record to update first!");
+        return;
+    }
 
     $.ajax({
         method: "PUT",
@@ -73,9 +108,7 @@ function updateDetails(){
         success:function (){
             alert("Updated!")
             getAllDetails();
-            $("#exampleFormControlInput9").val("");
-            $("#select-bloodType").val("");
-            $("#exampleFormControlInput10").val("");
+            clearForm()
         },
 
         error: function (xhr, exception) {
@@ -87,7 +120,7 @@ function updateDetails(){
 }
 
 function deleteDetails(){
-    let bloodBankId = $('#exampleFormControlInput1').val();
+    let bloodBankId = $('#exampleFormControlInput9').val();
 
     $.ajax({
         method: "DELETE",
@@ -97,9 +130,7 @@ function deleteDetails(){
 
         success:function (){
             alert("deleted!")
-            $("#exampleFormControlInput9").val("");
-            $("#select-bloodType").val("");
-            $("#exampleFormControlInput10").val("");
+            clearForm();
             getAllDetails();
         },
 
@@ -111,30 +142,11 @@ function deleteDetails(){
 
 }
 
-function getAllDetails(){
-    $.ajax({
-        method: "GET",
-        url:"http://localhost:8080/api/v1/bloodBank/get",
-        success:function (data) {
-            let tableBody = $("#bloodBankTable");
-            tableBody.empty();
-            data.forEach(bloodBank => {
-                tableBody.append(`
-                <tr>
-                    <td>${bloodBank.bloodBankId}</td>
-                    <td>${bloodBank.bloodType}</td>
-                    <td>${bloodBank.points}</td>
-                </tr>
-            `)
-            });
-        },
 
-        error: function (xhr, exception) {
-            alert("Error!")
-        }
-
-    })
-
+function clearForm(){
+    $("#exampleFormControlInput9").val("");
+    $("#select-bloodType").val("");
+    $("#exampleFormControlInput10").val("");
 }
 
 $(document).ready(function () {

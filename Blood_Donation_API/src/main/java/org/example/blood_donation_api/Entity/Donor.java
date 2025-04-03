@@ -34,3 +34,16 @@ public class Donor {
     private List<Donation> donations = new ArrayList<>();
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
