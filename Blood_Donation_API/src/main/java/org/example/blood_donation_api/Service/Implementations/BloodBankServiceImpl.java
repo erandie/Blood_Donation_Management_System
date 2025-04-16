@@ -11,7 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class BloodBankServiceImpl implements BloodBankService {
@@ -30,14 +33,21 @@ public class BloodBankServiceImpl implements BloodBankService {
     @Override
     @Transactional
     public void saveNewBloodsToGroup(BloodBankDTO bloodBankDTO) {
-        if (bloodBankRepo.findFirstByBloodType(BloodTypes.valueOf(bloodBankDTO.getBloodType())).isPresent()) {
-            throw new RuntimeException("Blood Bank with this Blood Type Already Exists");
-        }
+        BloodTypes type = BloodTypes.valueOf(bloodBankDTO.getBloodType());
 
-        BloodBank bloodBank = modelMapper.map(bloodBankDTO, BloodBank.class);
-        bloodBank.setPoints(0.0);
-        bloodBankRepo.save(bloodBank);
+        Optional<BloodBank> optional = bloodBankRepo.findFirstByBloodType(type);
+
+        if (optional.isPresent()) {
+            BloodBank existing = optional.get();
+            double newPoints = existing.getPoints() + bloodBankDTO.getPoints();
+            existing.setPoints(newPoints);
+            bloodBankRepo.save(existing);
+        } else {
+            BloodBank newBloodBank = modelMapper.map(bloodBankDTO, BloodBank.class);
+            bloodBankRepo.save(newBloodBank);
+        }
     }
+
 
     @Override
     @Transactional
@@ -73,6 +83,19 @@ public class BloodBankServiceImpl implements BloodBankService {
         return bloodBankRepo.getTotalBloodStock();
     }
 
+    public List<BloodBankDTO> searchByBloodType(String bloodType) {
+        BloodTypes type;
+        try {
+            type = BloodTypes.valueOf(bloodType.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            return new ArrayList<>();
+        }
+
+        return bloodBankRepo.findByBloodType(type)
+                .stream()
+                .map(bloodBank -> modelMapper.map(bloodBank, BloodBankDTO.class))
+                .collect(Collectors.toList());
+    }
 
 }
 

@@ -1,16 +1,26 @@
 package org.example.blood_donation_api.Controller;
 
+import jakarta.validation.Valid;
+import org.example.blood_donation_api.Repo.BloodBankRepo;
 import org.example.blood_donation_api.Service.Implementations.BloodBankServiceImpl;
 import org.example.blood_donation_api.Util.ResponseUtil;
 import org.example.blood_donation_api.dto.BloodBankDTO;
+import org.example.blood_donation_api.dto.EmployeeDTO;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/bloodBank")
 @CrossOrigin
+@Validated
 public class BloodBankController {
 
     @Autowired
@@ -22,18 +32,19 @@ public class BloodBankController {
     }
 
     @PostMapping("save")
-    public ResponseUtil saveNewBloodsToGroup(@RequestBody BloodBankDTO bloodBankDTO) {
+    public ResponseUtil saveNewBloodsToGroup(@Valid @RequestBody BloodBankDTO bloodBankDTO, BindingResult bindingResult) {
         bloodBankServiceImpl.saveNewBloodsToGroup(bloodBankDTO);
         return new ResponseUtil(
                 201,
                 "Blood Bank Saved",
-                null
+                bloodBankDTO
         );
     }
 
     @PutMapping("update")
-    public ResponseUtil updateBloodGroupsDetails(@RequestBody BloodBankDTO bloodBankDTO) {
+    public ResponseUtil updateBloodGroupsDetails(@Valid @RequestBody BloodBankDTO bloodBankDTO, BindingResult bindingResult) {
         bloodBankServiceImpl.updateBloodGroupsDetails(bloodBankDTO);
+
         return new ResponseUtil(
                 200,
                 "Blood Bank Updated",
@@ -68,6 +79,17 @@ public class BloodBankController {
                 200,
                 "Total Bloods We Have",
                 bloodStock
+        );
+    }
+
+    @GetMapping("search")
+    public ResponseUtil searchBloodType(@RequestParam String bloodType){
+        List<BloodBankDTO> bloodTypes = bloodBankServiceImpl.searchByBloodType(bloodType);
+
+        return new ResponseUtil(
+                200,
+                "Here You Go!!",
+                bloodTypes
         );
     }
 

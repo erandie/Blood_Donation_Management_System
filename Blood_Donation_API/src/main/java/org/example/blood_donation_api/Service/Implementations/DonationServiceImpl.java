@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import org.example.blood_donation_api.Entity.Donation;
 import org.example.blood_donation_api.Repo.DonationRepo;
 import org.example.blood_donation_api.Service.DonationService;
+import org.example.blood_donation_api.Util.ResponseUtil;
 import org.example.blood_donation_api.dto.DonationDTO;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -25,14 +27,15 @@ public class DonationServiceImpl implements DonationService {
     @Override
     public List<DonationDTO> getAllDonations() {
         List<Donation> donations = donationRepo.findAll();
-        return modelMapper.map(donations, new TypeToken<List<DonationDTO>>(){}.getType());
+        return modelMapper.map(donations, new TypeToken<List<DonationDTO>>() {
+        }.getType());
     }
 
     @Override
     public void saveDonations(DonationDTO donationDTO) {
-       if (donationRepo.existsById(donationDTO.getDonationId())) {
-           throw new RuntimeException("Donation Already Exists!");
-       }
+        if (donationRepo.existsById(donationDTO.getDonationId())) {
+            throw new RuntimeException("Donation Already Exists!");
+        }
         donationRepo.save(modelMapper.map(donationDTO, Donation.class));
     }
 
@@ -50,10 +53,15 @@ public class DonationServiceImpl implements DonationService {
         donationRepo.deleteById(donationId);
     }
 
-    public long getDonationCount(){
+    public long getDonationCount() {
         return donationRepo.count();
     }
 
+    public DonationDTO searchById(Integer donationId) {
+        Donation donation = donationRepo.findByDonationId(donationId)
+                .orElseThrow(() -> new RuntimeException("Donation not found"));
+        return modelMapper.map(donation, DonationDTO.class);
+    }
 }
 
 

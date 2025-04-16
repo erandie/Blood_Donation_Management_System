@@ -469,12 +469,28 @@
                 overflow-x: auto;
             }
         }
-    </style>
 
+        .content-wrapper {
+            margin-top: -30px; /* Move content up */
+            padding: 5px;
+            max-width: 1200px;
+            margin-left: -10px;
+            margin-right: auto;
+        }
+
+    </style>
 </head>
 
 <script src="js/jquery-3.7.1.min.js"></script>
 <script src="js/adminDashboard.js"></script>
+<script src="js/BloodBankJS.js"></script>
+<script src="js/donation.js"></script>
+<script src="js/donor.js"></script>
+<script src="js/Employee.js"></script>
+<script src="js/funds.js"></script>
+<script src="js/Patient.js"></script>
+<script src="js/ReceptionistJS.js"></script>
+<script src="js/users.js"></script>
 
 <body>
 <div class="dashboard">
@@ -564,62 +580,13 @@
             <table>
                 <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Donor</th>
-                    <th>Blood Type</th>
-                    <th>Date</th>
-                    <th>Status</th>
+                    <th style="font-size: 16px; font-weight: bold" scope="col">Donation ID</th>
+                    <th style="font-size: 16px; font-weight: bold" scope="col">Blood Points</th>
+                    <th style="font-size: 16px; font-weight: bold" scope="col">Blood Type</th>
+                    <th style="font-size: 16px; font-weight: bold" scope="col">Date</th>
                 </tr>
                 </thead>
-                <tbody>
-                <tr>
-                    <td>#FC001</td>
-                    <td>
-                        <div class="donor-info">
-                            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="John Doe">
-                            <span class="donor-name">John Doe</span>
-                        </div>
-                    </td>
-                    <td><span class="blood-type">O+</span></td>
-                    <td>May 15, 2024</td>
-                    <td><span class="status completed">Completed</span></td>
-                </tr>
-                <tr>
-                    <td>#FC002</td>
-                    <td>
-                        <div class="donor-info">
-                            <img src="https://randomuser.me/api/portraits/women/28.jpg" alt="Jane Smith">
-                            <span class="donor-name">Jane Smith</span>
-                        </div>
-                    </td>
-                    <td><span class="blood-type">A-</span></td>
-                    <td>May 14, 2024</td>
-                    <td><span class="status pending">Pending</span></td>
-                </tr>
-                <tr>
-                    <td>#FC003</td>
-                    <td>
-                        <div class="donor-info">
-                            <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="Mike Johnson">
-                            <span class="donor-name">Mike Johnson</span>
-                        </div>
-                    </td>
-                    <td><span class="blood-type">B+</span></td>
-                    <td>May 13, 2024</td>
-                    <td><span class="status completed">Completed</span></td>
-                </tr>
-                <tr>
-                    <td>#FC004</td>
-                    <td>
-                        <div class="donor-info">
-                            <img src="https://randomuser.me/api/portraits/women/63.jpg" alt="Emily Davis">
-                            <span class="donor-name">Emily Davis</span>
-                        </div>
-                    </td>
-                    <td><span class="blood-type">AB+</span></td>
-                    <td>May 12, 2024</td>
-                    <td><span class="status completed">Completed</span></td>
-                </tr>
+                <tbody id="donationTable">
                 </tbody>
             </table>
         </div>
@@ -627,6 +594,71 @@
     </div>
 </div>
 
+<script>
+    document.querySelectorAll('.menu a').forEach(link => {
+        link.addEventListener('click', async function(e) {
+            e.preventDefault();
+
+            document.querySelectorAll('.menu li').forEach(li => li.classList.remove('active'));
+            this.parentElement.classList.add('active');
+
+            const url = this.getAttribute('href');
+            const mainContent = document.querySelector('.main-content');
+
+            try {
+                const res = await fetch(url);
+                const data = await res.text();
+                mainContent.innerHTML = `
+    <div class="content-wrapper">
+        ${data}
+    </div>
+`;
+
+                setTimeout(() => {
+                    const extraSidebar = document.querySelector('.content-wrapper .sidebar, .content-wrapper .menu');
+                    if (extraSidebar) extraSidebar.style.display = 'none';
+                }, 0);
+
+
+            } catch (err) {
+                mainContent.innerHTML = '<p style="color:red;">Failed to load page 😢</p>';
+                console.error(err);
+            }
+        });
+    });
+</script>
+
+<script>
+    function getAllDonations() {
+        $.ajax({
+            method: "GET",
+            url: "http://localhost:8080/api/v1/donation/get",
+            headers: getAuthHeaders(),
+            success: function (data) {
+                let tableBody = $("#donationTable");
+                tableBody.empty();
+                data.forEach(donation => {
+                    tableBody.append(`
+                        <tr>
+                            <td>${donation.donationId}</td>
+                            <td>${donation.bloodPoints} milliliters</td>
+                            <td>${donation.bloodType}</td>
+                            <td>${donation.selectedDate}</td>
+                        </tr>
+                    `);
+                });
+            },
+            error: function (xhr, exception) {
+                alert("Error!");
+            }
+        });
+    }
+
+    // Call the function when the page loads
+    $(document).ready(function () {
+        getAllDonations();
+    });
+</script>
 
 
 </body>

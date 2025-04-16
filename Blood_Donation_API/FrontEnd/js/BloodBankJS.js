@@ -1,10 +1,19 @@
 $(document).ready(function () {
     loadBloodTypes();
 });
+
+function getAuthHeaders() {
+    return {
+        "Authorization": localStorage.getItem("token"),
+        "Content-Type": "application/json"
+    };
+}
+
 function loadBloodTypes() {
     $.ajax({
         url: "http://localhost:8080/api/v1/bloodTypes/get",
         method: "GET",
+        headers: getAuthHeaders(),
         success: function (bloodTypes) {
             const bloodTypeSelect = $("#select-bloodType");
             bloodTypeSelect.empty();
@@ -24,6 +33,7 @@ function getAllDetails() {
     $.ajax({
         method: "GET",
         url: "http://localhost:8080/api/v1/bloodBank/get",
+        headers: getAuthHeaders(),
         success: function (data) {
             let tableBody = $("#bloodBankTable");
             tableBody.empty();
@@ -53,31 +63,36 @@ function getAllDetails() {
 }
 
 function saveDetails() {
-    let bloodBankId = parseInt($('#exampleFormControlInput9').val());
     let bloodType = $("#select-bloodType").val();
     let points = parseFloat($('#exampleFormControlInput10').val());
 
-    if (!bloodType || isNaN(points)) {
+    /*if (!bloodType || isNaN(points)) {
         alert("Please select blood type and enter valid points!");
         return;
     }
-
+*/
     $.ajax({
         method: "POST",
         contentType: "application/json",
-        url: "http://localhost:8080/api/v1/bloodBank/add-points",
+        url: "http://localhost:8080/api/v1/bloodBank/save",
+        headers: getAuthHeaders(),
         data: JSON.stringify({
-            "bloodBankId": bloodBankId,
             "bloodType": bloodType,
             "points": points
         }),
-        success: function () {
-            alert("Saved!");
-            getAllDetails();
-            clearForm();
+        success: function (res) {
+            if (res.code === 201) {
+                alert("Saved!");
+                getAllDetails();
+                clearForm();
+            }  else {
+                alert("Failed to save: " + res.message);
+            }
+
         },
-        error: function () {
-            alert("Error!");
+        error: function (xhr) {
+            let errMsg = xhr.responseJSON?.message || "Something went wrong!";
+            alert("Error: " + errMsg);
         }
     });
 }
@@ -96,7 +111,7 @@ function updateDetails(){
     $.ajax({
         method: "PUT",
         contentType:"application/json",
-        headers: { "Accept": "application/json" },
+        headers: getAuthHeaders(),
         url:"http://localhost:8080/api/v1/bloodBank/update",
         async:true,
         data:JSON.stringify({
@@ -105,14 +120,19 @@ function updateDetails(){
             "points":points
         }),
 
-        success:function (){
-            alert("Updated!")
-            getAllDetails();
-            clearForm()
+        success: function (res) {
+            if (res.code === 200) {
+                alert("Updated!");
+                getAllDetails();
+                clearForm();
+            } else {
+                alert("Failed to update: " + res.message);
+            }
         },
 
-        error: function (xhr, exception) {
-            alert("Error!")
+        error: function (xhr) {
+            let errMsg = xhr.responseJSON?.message || "Something went wrong!";
+            alert("Error: " + errMsg);
         }
 
     })
@@ -126,6 +146,7 @@ function deleteDetails(){
         method: "DELETE",
         contentType:"application/json",
         url:"http://localhost:8080/api/v1/bloodBank/delete/"+bloodBankId,
+        headers: getAuthHeaders(),
         async:true,
 
         success:function (){
@@ -163,8 +184,50 @@ $(document).ready(function () {
     })
 })
 
+$(document).ready(function () {
+    let timeOut = null;
+    $('#searchInput').on('input', function () {
+        clearTimeout(timeOut);
+        timeOut = setTimeout(function () {
+            const query = $('#searchInput').val().trim();
+            searchBloodTypes(query);
+        }, 300);
+    });
 
+    $('#searchInput').on('keypress', function (e){
+        if (e.which === 13){
+            e.preventDefault();
+            const query = $('#searchInput').val().trim();
+            searchBloodTypes(query);
+        }
+    });
+});
 
+function searchBloodTypes(bloodType){
+    $.ajax({
+        method: "GET",
+        url: "http://localhost:8080/api/v1/bloodBank/search?bloodType=" + encodeURIComponent(bloodType),
+        headers: getAuthHeaders(),
+        success:function (data) {
+            const tableBody = $("#bloodBankTable");
+            tableBody.empty();
+            data.data.forEach(bloodBank => {
+                tableBody.append(`
+                    <tr>
+                        <td>${bloodBank.bloodBankId}</td>
+                        <td>${bloodBank.bloodType}</td>
+                        <td>${bloodBank.points}</td>
+                    </tr>
+                `);
+            });
+        },
+
+        error: function (xhr) {
+            alert("Search Failed!")
+        }
+
+    })
+}
 
 
 

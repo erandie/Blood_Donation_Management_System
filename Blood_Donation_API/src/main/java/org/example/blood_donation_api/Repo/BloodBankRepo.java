@@ -13,4 +13,7 @@ public interface BloodBankRepo extends JpaRepository<BloodBank, Integer> {
     @Query("SELECT SUM(b.points) FROM BloodBank b")
     double getTotalBloodStock();
 
+    List<BloodBank> findByBloodType(BloodTypes bloodType);
+
+
 }

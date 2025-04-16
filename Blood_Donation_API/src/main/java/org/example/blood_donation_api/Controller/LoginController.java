@@ -57,6 +57,7 @@ public class LoginController {
         AuthDTO authDTO = new AuthDTO();
         authDTO.setEmail(loadedUser.getEmail());
         authDTO.setToken(token);
+        authDTO.setRole(String.valueOf(loadedUser.getRole()));
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new ResponseUtil(VarList.Created, "Success!", authDTO));
@@ -72,7 +73,7 @@ public class LoginController {
 //search hdnna one
 //validation hdnna one
 //transaction ekk ghnna blood gttm bank eke adu wena widiyta
-//dashboard deka loard krnna login ekta anuwa
+//dashboard deka loard krnna login ekta set wena widiyt
 
 
 

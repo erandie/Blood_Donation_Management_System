@@ -4,9 +4,17 @@ $(document).ready(function () {
     loadRoles();
 });
 
+function getAuthHeaders() {
+    return {
+        "Authorization": localStorage.getItem("token"),
+        "Content-Type": "application/json"
+    };
+}
+
 function loadDetailsToProfileInfo(userId) {
     $.ajax({
         url: `http://localhost:8080/api/v1/user/get/${userId}`,
+        headers: getAuthHeaders(),
         method: "GET",
         success: function (response) {
             const userName = $("#userName");
@@ -30,6 +38,7 @@ function loadDetailsToProfileInfo(userId) {
 function loadRoles(){
     $.ajax({
         url: "http://localhost:8080/api/v1/role/get",
+        headers: getAuthHeaders(),
         method: "GET",
         success: function (roles){
             const selectRole = $("#role");
@@ -48,6 +57,7 @@ function loadRoles(){
 function loadDetailsToProfileForm(userId) {
     $.ajax({
         url: `http://localhost:8080/api/v1/user/get/${userId}`,
+        headers: getAuthHeaders(),
         method: "GET",
         success: function (response) {
             const user = response.data;
@@ -82,7 +92,7 @@ function updateUser(){
     $.ajax({
         method:"PUT",
         contentType:"application/json",
-        headers: { "Accept": "application/json" },
+        headers: getAuthHeaders(),
         url: `http://localhost:8080/api/v1/user/update/${userId}`,
         async:true,
         data:JSON.stringify({

@@ -2,9 +2,17 @@ $(document).ready(function () {
     loadBloodBankIDs();
 });
 
+function getAuthHeaders() {
+    return {
+        "Authorization": localStorage.getItem("token"),
+        "Content-Type": "application/json"
+    };
+}
+
 function loadBloodBankIDs() {
     $.ajax({
         url: "http://localhost:8080/api/v1/bloodBank/get",
+        headers: getAuthHeaders(),
         method: "GET",
         success: function (bloodBanks) {
             const selectBloodBank = $("#select-bloodBank");
@@ -30,6 +38,7 @@ function savePatient(){
         method:"POST",
         contentType:"application/json",
         url:"http://localhost:8080/api/v1/patient/save",
+        headers: getAuthHeaders(),
         async:true,
         data:JSON.stringify({
             "patientId":"",
@@ -38,18 +47,19 @@ function savePatient(){
             "address":address,
             "bloodBankId": bloodBank_id
         }),
-        success:function (data) {
-            alert("saved!")
-            getAllPatient();
-            $("#exampleFormControlInput15").val("");
-            $("#exampleFormControlInput16").val("");
-            $("#exampleFormControlInput17").val("");
-            $("#exampleFormControlInput18").val("");
-            $("#select-bloodBank").val("");
-
+        success:function (res) {
+            if (res.code === 201) {
+                alert("saved!")
+                getAllPatient();
+                clearForm();
+            } else {
+                alert("Failed to save: " + res.message);
+            }
         },
-        error: function (xhr, exception) {
-            alert("Error!")
+
+        error: function (xhr) {
+            let errMsg = xhr.responseJSON?.message || "Something went wrong!";
+            alert("Error: " + errMsg);
         }
     })
 }
@@ -64,7 +74,7 @@ function updatePatient(){
     $.ajax({
         method:"PUT",
         contentType:"application/json",
-        headers: { "Accept": "application/json" },
+        headers: getAuthHeaders(),
         url:"http://localhost:8080/api/v1/patient/update",
         async:true,
         data:JSON.stringify({
@@ -75,37 +85,34 @@ function updatePatient(){
             "bloodBankId": bloodBank_id
         }),
 
-        success:function (data) {
-            alert("updated!")
-            getAllPatient();
-            $("#exampleFormControlInput15").val("");
-            $("#exampleFormControlInput16").val("");
-            $("#exampleFormControlInput17").val("");
-            $("#exampleFormControlInput18").val("");
-            $("#select-bloodBank").val("");
-
+        success: function (res) {
+            if (res.code === 200) {
+                alert("Updated!");
+                getAllPatient();
+                clearForm();
+            } else {
+                alert("Failed to update: " + res.message);
+            }
         },
-        error: function (xhr, exception) {
-            alert("Error!")
+
+        error: function (xhr) {
+            let errMsg = xhr.responseJSON?.message || "Something went wrong!";
+            alert("Error: " + errMsg);
         }
     })
 }
 
 function deletePatient(){
-    let patientId = $('#exampleFormControlInput1').val();
+    let patientId = $('#exampleFormControlInput15').val();
 
     $.ajax({
         method:"DELETE",
         url:"http://localhost:8080/api/v1/patient/delete/"+patientId,
+        headers: getAuthHeaders(),
         async:true,
         success:function (data) {
             alert("deleted!")
-            $("#exampleFormControlInput15").val("");
-            $("#exampleFormControlInput16").val("");
-            $("#exampleFormControlInput17").val("");
-            $("#exampleFormControlInput18").val("");
-            $("#select-bloodBank").val("");
-
+            clearForm();
             getAllPatient()
         },
         error: function (xhr, exception) {
@@ -119,6 +126,7 @@ function getAllPatient(){
     $.ajax({
         method:"GET",
         url:"http://localhost:8080/api/v1/patient/get",
+        headers: getAuthHeaders(),
         success:function (data) {
             let tableBody = $("#patientTable");
             tableBody.empty();
@@ -140,6 +148,61 @@ function getAllPatient(){
     })
 }
 
+$(document).ready(function (){
+    let timeout = null;
+    $('#searchInput').on('input', function (){
+        clearTimeout(timeout);
+        timeout = setTimeout(function (){
+            const query = $('#searchInput').val().trim();
+            searchPatients(query);
+        }, 300);
+    });
+
+    $('#searchInput').on('keypress', function (e){
+        if (e.which === 13){
+            e.preventDefault();
+            const query = $('#searchInput').val().trim();
+            searchPatients(query);
+        }
+    });
+});
+
+function searchPatients(name){
+    $.ajax({
+        method: "GET",
+        url: "http://localhost:8080/api/v1/patient/search?name=" + encodeURIComponent(name),
+        headers:getAuthHeaders(),
+        success:function (data){
+            const tableBody = $("#patientTable");
+            tableBody.empty();
+            data.data.forEach(patient => {
+                tableBody.append(`
+                    <tr>
+                        <td>${patient.patientId}</td>
+                        <td>${patient.name}</td>
+                        <td>${patient.email}</td>
+                        <td>${patient.address}</td>
+                        <td>${patient.bloodBankId}</td>
+                    </tr>
+                `);
+            });
+        },
+
+        error: function (xhr){
+            alert("Search Failed!")
+        }
+
+    })
+}
+
+function clearForm(){
+    $("#exampleFormControlInput15").val("");
+    $("#exampleFormControlInput16").val("");
+    $("#exampleFormControlInput17").val("");
+    $("#exampleFormControlInput18").val("");
+    $("#select-bloodBank").val("");
+}
+
 $(document).ready(function () {
     $(document).on('click', '#patientTable tr', function () {
         var col0 = $(this).find('td:eq(0)').text();
@@ -156,6 +219,41 @@ $(document).ready(function () {
 
     })
 })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

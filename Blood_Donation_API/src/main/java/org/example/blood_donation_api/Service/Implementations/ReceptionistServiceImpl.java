@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -47,6 +48,13 @@ public class ReceptionistServiceImpl implements ReceptionistService {
     @Override
     public void deleteReceptionist(Integer receptionistId) {
         receptionistRepo.deleteById(receptionistId);
+    }
+
+    public List<ReceptionistDTO> searchByName(String name) {
+        return receptionistRepo.findByNameContainingIgnoreCase(name)
+                .stream()
+                .map(receptionist -> modelMapper.map(receptionist, ReceptionistDTO.class))
+                .collect(Collectors.toList());
     }
 }
 

@@ -1,10 +1,12 @@
 package org.example.blood_donation_api.Controller;
 
+import jakarta.validation.Valid;
 import org.example.blood_donation_api.Service.BloodService;
 import org.example.blood_donation_api.Service.Implementations.BloodServiceImpl;
 import org.example.blood_donation_api.Util.ResponseUtil;
 import org.example.blood_donation_api.dto.BloodDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,6 +14,7 @@ import java.util.List;
 @RestController
 @CrossOrigin
 @RequestMapping("api/v1/blood")
+@Validated
 public class BloodController {
 
     @Autowired
@@ -23,7 +26,7 @@ public class BloodController {
     }
 
     @PostMapping("save")
-    public ResponseUtil saveBloods(@RequestBody BloodDTO bloodDTO){
+    public ResponseUtil saveBloods(@Valid @RequestBody BloodDTO bloodDTO){
         bloodService.saveBloods(bloodDTO);
         return new ResponseUtil(
                 201,
@@ -33,7 +36,7 @@ public class BloodController {
     }
 
     @PutMapping("update")
-    public ResponseUtil updateBloods(@RequestBody BloodDTO bloodDTO){
+    public ResponseUtil updateBloods(@Valid @RequestBody BloodDTO bloodDTO){
         bloodService.updateBloods(bloodDTO);
         return new ResponseUtil(
                 200,

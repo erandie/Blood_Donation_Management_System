@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -49,6 +50,12 @@ public class FundsServiceImpl implements FundsService {
         fundsRepo.deleteById(fundId);
     }
 
+    public List<FundsDTO> searchByDescription(String description){
+        return fundsRepo.findByDescriptionContainingIgnoreCase(description)
+                .stream()
+                .map(funds -> modelMapper.map(funds, FundsDTO.class))
+                .collect(Collectors.toList());
+    }
 
 
 }

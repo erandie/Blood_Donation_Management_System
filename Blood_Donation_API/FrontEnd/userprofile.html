@@ -3,571 +3,127 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Profile</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-
-<style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: 'Arial', sans-serif;
-    }
-
-    body {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        background-color: #f4f4f4;
-    }
-
-    .profile-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-    }
-
-    .profile-card {
-        background: white;
-        padding: 20px;
-        border-radius: 12px;
-        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-        text-align: center;
-        max-width: 300px;
-        width: 100%;
-    }
-
-    .profile-card img {
-        width: 100px;
-        height: 100px;
-        border-radius: 50%;
-        object-fit: cover;
-        margin-bottom: 15px;
-    }
-
-    .profile-card h2 {
-        font-size: 22px;
-        margin-bottom: 8px;
-    }
-
-    .profile-card .role {
-        color: #666;
-        font-size: 16px;
-        margin-bottom: 10px;
-    }
-
-    .profile-card .user-id {
-        color: #888;
-        font-size: 14px;
-        margin-bottom: 15px;
-    }
-
-    .edit-btn {
-        background: #007bff;
-        color: white;
-        border: none;
-        padding: 8px 16px;
-        border-radius: 6px;
-        cursor: pointer;
-        transition: 0.3s;
-    }
-
-    .edit-btn:hover {
-        background: #0056b3;
-    }
-
-</style>
-
-<body>
-<div class="profile-container">
-    <div class="profile-card">
-        <img id="profileImage" src="default-profile.png" alt="User Profile">
-        <h2 id="userName">John Doe</h2>
-        <p class="role" id="userRole">Role: USER</p>
-        <p class="user-id" id="userId">User ID: 123</p>
-        <button class="edit-btn">Edit Profile</button>
-    </div>
-</div>
-</body>
-</html>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Profile | Blood Donation System</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>FairyCare Blood Donation</title>
     <style>
-        :root {
-            --primary: #e63946;
-            --secondary: #f1faee;
-            --dark: #1d3557;
-            --light: #a8dadc;
-            --white: #ffffff;
+        /* Smooth animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background-color: #f5f5f5;
-        }
-
-        .dashboard {
-            display: flex;
-            min-height: 100vh;
-        }
-
-        /* Sidebar Styles */
-        .sidebar {
-            width: 250px;
-            background-color: var(--dark);
-            color: var(--white);
-            padding: 20px 0;
-            transition: all 0.3s;
-        }
-
-        .sidebar-header {
-            padding: 0 20px 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .sidebar-header h3 {
-            color: var(--white);
-            font-size: 1.5rem;
-            margin-bottom: 5px;
-        }
-
-        .sidebar-header p {
-            color: var(--light);
-            font-size: 0.8rem;
-        }
-
-        .sidebar-menu {
-            padding: 20px 0;
-        }
-
-        .sidebar-menu ul {
-            list-style: none;
-        }
-
-        .sidebar-menu li {
-            margin-bottom: 5px;
-        }
-
-        .sidebar-menu a {
-            display: block;
-            padding: 10px 20px;
-            color: var(--white);
-            text-decoration: none;
-            transition: all 0.3s;
-        }
-
-        .sidebar-menu a:hover, .sidebar-menu a.active {
-            background-color: rgba(255, 255, 255, 0.1);
-            border-left: 3px solid var(--primary);
-        }
-
-        .sidebar-menu i {
-            margin-right: 10px;
-            width: 20px;
-            text-align: center;
-        }
-
-        /* Main Content Styles */
-        .main-content {
-            flex: 1;
-            padding: 20px;
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #ddd;
-        }
-
-        .header h1 {
-            color: var(--dark);
-        }
-
-        .user-actions {
-            display: flex;
-            align-items: center;
-        }
-
-        .user-actions .notification {
-            margin-right: 20px;
-            position: relative;
-            cursor: pointer;
-        }
-
-        .user-actions .notification i {
-            font-size: 1.2rem;
-            color: var(--dark);
-        }
-
-        .user-actions .notification .badge {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            background-color: var(--primary);
-            color: white;
-            border-radius: 50%;
-            width: 15px;
-            height: 15px;
-            font-size: 0.6rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .user-actions .profile {
-            display: flex;
-            align-items: center;
-        }
-
-        .user-actions .profile img {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            margin-right: 10px;
-            object-fit: cover;
-        }
-
-        /* Profile Card Styles */
-        .profile-card {
-            background-color: var(--white);
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-            padding: 30px;
-            margin-bottom: 30px;
-        }
-
-        .profile-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 30px;
-        }
-
-        .profile-image {
-            position: relative;
-            margin-right: 30px;
-        }
-
-        .profile-image img {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 5px solid var(--secondary);
-        }
-
-        .profile-image .edit-icon {
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
-            background-color: var(--primary);
-            color: white;
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-        }
-
-        .profile-info h2 {
-            color: var(--dark);
-            margin-bottom: 10px;
-        }
-
-        .profile-info .role-badge {
-            display: inline-block;
-            padding: 5px 15px;
-            background-color: var(--light);
-            color: var(--dark);
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
-
-        .profile-info p {
-            color: #666;
-            margin-bottom: 5px;
-        }
-
-        .profile-info p i {
-            margin-right: 10px;
-            color: var(--primary);
-            width: 20px;
-        }
-
-        /* Profile Form Styles */
-        .profile-form h3 {
-            color: var(--dark);
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #eee;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-row {
-            display: flex;
-            gap: 20px;
-        }
-
-        .form-col {
-            flex: 1;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: var(--dark);
-            font-weight: 500;
-        }
-
-        .form-group input, .form-group select {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 1rem;
-            transition: all 0.3s;
-        }
-
-        .form-group input:focus, .form-group select:focus {
-            border-color: var(--primary);
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.1);
-        }
-
-        .form-actions {
-            display: flex;
-            justify-content: flex-end;
-            gap: 15px;
-            margin-top: 30px;
-        }
-
-        .btn {
-            padding: 10px 25px;
-            border-radius: 5px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s;
-            border: none;
-            font-size: 1rem;
-        }
-
-        .btn-primary {
-            background-color: var(--primary);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background-color: #c1121f;
-        }
-
-        .btn-secondary {
-            background-color: #ddd;
-            color: #333;
-        }
-
-        .btn-secondary:hover {
-            background-color: #ccc;
-        }
-
-        /* Responsive Styles */
-        @media (max-width: 768px) {
-            .dashboard {
-                flex-direction: column;
-            }
-
-            .sidebar {
-                width: 100%;
-                height: auto;
-            }
-
-            .profile-header {
-                flex-direction: column;
-                text-align: center;
-            }
-
-            .profile-image {
-                margin-right: 0;
-                margin-bottom: 20px;
-            }
-
-            .form-row {
-                flex-direction: column;
-                gap: 0;
-            }
-        }
+        .animate-fadeown { animation: fadeIn 0.8s ease-out; }
     </style>
 </head>
-<body>
-<div class="dashboard">
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <div class="sidebar-header">
-            <h3>Blood Donation</h3>
-            <p>Save Lives, Donate Blood</p>
-        </div>
-        <div class="sidebar-menu">
-            <ul>
-                <li><a href="#"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-                <li><a href="#" class="active"><i class="fas fa-user"></i> Profile</a></li>
-                <li><a href="#"><i class="fas fa-heartbeat"></i> Donations</a></li>
-                <li><a href="#"><i class="fas fa-calendar-alt"></i> Appointments</a></li>
-                <li><a href="#"><i class="fas fa-bell"></i> Notifications</a></li>
-                <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
-                <li><a href="#"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
-            </ul>
-        </div>
-    </div>
+<body style="margin:0; font-family:'Segoe UI', Arial, sans-serif; background:#f9f9f9;">
 
-    <!-- Main Content -->
-    <div class="main-content">
-        <div class="header">
-            <h1>User Profile</h1>
-            <div class="user-actions">
-                <div class="notification">
-                    <i class="fas fa-bell"></i>
-                    <span class="badge">3</span>
-                </div>
-                <div class="profile">
-                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User">
-                    <span>John Doe</span>
-                </div>
+<!-- Modern Header -->
+<header style="position:sticky; top:0; z-index:100; box-shadow:0 2px 15px rgba(0,0,0,0.1);">
+    <!-- Top Bar -->
+    <div style="background:#e3f2fd; padding:8px 0;">
+        <div style="max-width:1200px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; padding:0 20px;">
+            <div style="display:flex; gap:20px;">
+                <a href="mailto:fairyCareBloodDonation@gmail.com" style="color:#1976d2; text-decoration:none; display:flex; align-items:center; gap:5px;">
+                    ✉️ fairyCareBloodDonation@gmail.com
+                </a>
+                <span style="color:#1976d2; display:flex; align-items:center; gap:5px;">
+            📞 +94 761 940 278
+          </span>
             </div>
-        </div>
-
-        <div class="profile-card">
-            <div class="profile-header">
-                <div class="profile-image">
-                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Profile Image" id="profileImage">
-                    <div class="edit-icon" onclick="document.getElementById('imageUpload').click()">
-                        <i class="fas fa-pencil-alt"></i>
-                        <input type="file" id="imageUpload" style="display: none;" accept="image/*">
-                    </div>
-                </div>
-                <div class="profile-info">
-                    <h2 id="userName">John Doe</h2>
-                    <span class="role-badge" id="userRole">DONOR</span>
-                    <p><i class="fas fa-envelope"></i> <span id="userEmail">john.doe@example.com</span></p>
-                    <p><i class="fas fa-phone"></i> <span id="userPhone">+1 (555) 123-4567</span></p>
-                    <p><i class="fas fa-map-marker-alt"></i> <span id="userAddress">123 Main St, New York, USA</span></p>
-                </div>
-            </div>
-
-            <div class="profile-form">
-                <h3>Edit Profile</h3>
-                <form id="userProfileForm">
-                    <div class="form-row">
-                        <div class="form-col">
-                            <div class="form-group">
-                                <label for="name">Full Name</label>
-                                <input type="text" id="name" name="name" value="John Doe">
-                            </div>
-                        </div>
-                        <div class="form-col">
-                            <div class="form-group">
-                                <label for="role">Role</label>
-                                <select id="role" name="role">
-                                    <option value="DONOR">Donor</option>
-                                    <option value="ADMIN">Admin</option>
-                                    <option value="STAFF">Staff</option>
-                                    <option value="RECIPIENT">Recipient</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-col">
-                            <div class="form-group">
-                                <label for="email">Email</label>
-                                <input type="email" id="email" name="email" value="john.doe@example.com">
-                            </div>
-                        </div>
-                        <div class="form-col">
-                            <div class="form-group">
-                                <label for="phone">Phone</label>
-                                <input type="tel" id="phone" name="phone" value="+1 (555) 123-4567">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="address">Address</label>
-                        <input type="text" id="address" name="address" value="123 Main St, New York, USA">
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-col">
-                            <div class="form-group">
-                                <label for="password">Password</label>
-                                <input type="password" id="password" name="password" placeholder="Enter new password">
-                            </div>
-                        </div>
-                        <div class="form-col">
-                            <div class="form-group">
-                                <label for="confirmPassword">Confirm Password</label>
-                                <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm new password">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-actions">
-                        <button type="button" class="btn btn-secondary">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Save Changes</button>
-                    </div>
-                </form>
+            <div style="display:flex; gap:15px;">
+                <a href="#" style="color:#555; transition:all 0.3s;">🐦</a>
+                <a href="#" style="color:#555; transition:all 0.3s;">👍</a>
+                <a href="#" style="color:#555; transition:all 0.3s;">📷</a>
+                <a href="#" style="color:#555; transition:all 0.3s;">🔗</a>
             </div>
         </div>
     </div>
-</div>
 
-<!--<script>
-    // Simple JavaScript to handle form submission and image upload
-    document.getElementById('userProfileForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        alert('Profile updated successfully!');
+    <!-- Main Nav -->
+    <div style="background:white; padding:15px 0;">
+        <div style="max-width:1200px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; padding:0 20px;">
+            <a href="index.html" style="text-decoration:none;">
+                <h1 style="color:#d32f2f; margin:0; font-size:28px; font-weight:700;">FairyCare</h1>
+            </a>
 
-        // Update the displayed information
-        document.getElementById('userName').textContent = document.getElementById('name').value;
-        document.getElementById('userRole').textContent = document.getElementById('role').value;
-        document.getElementById('userEmail').textContent = document.getElementById('email').value;
-        document.getElementById('userPhone').textContent = document.getElementById('phone').value;
-        document.getElementById('userAddress').textContent = document.getElementById('address').value;
+            <nav>
+                <ul style="display:flex; list-style:none; gap:25px; margin:0; padding:0;">
+                    <li><a href="#hero" style="color:#d32f2f; text-decoration:none; font-weight:500; transition:color 0.3s;">Home</a></li>
+                    <li><a href="#about" style="color:#555; text-decoration:none; font-weight:500; transition:color 0.3s;">About</a></li>
+                    <li><a href="#services" style="color:#555; text-decoration:none; font-weight:500; transition:color 0.3s;">Services</a></li>
+                    <li><a href="#contact" style="color:#555; text-decoration:none; font-weight:500; transition:color 0.3s;">Contact</a></li>
+                </ul>
+            </nav>
+
+            <a href="login.html" style="background:#d32f2f; color:white; padding:10px 20px; border-radius:5px; text-decoration:none; font-weight:600; transition:background 0.3s;">Login Here</a>
+        </div>
+    </div>
+</header>
+
+<!-- Hero Section with Modern Design -->
+<section id="hero" style="position:relative; overflow:hidden; background:linear-gradient(135deg, #f5f7fa 0%, #e3f2fd 100%); padding:80px 0; text-align:center;">
+    <div style="max-width:1200px; margin:0 auto; padding:0 20px;">
+        <div class="animate-fadeown" style="margin-bottom:40px;">
+            <h2 style="color:#333; font-size:2.5rem; margin-bottom:15px;">WELCOME TO FairyCare</h2>
+            <p style="color:#555; font-size:1.1rem; line-height:1.6; max-width:700px; margin:0 auto;">
+                Join us in saving lives! We're on a mission to find kind hearts ready to donate blood and make a difference.
+                Your generosity can help those in need today.
+            </p>
+        </div>
+
+        <div style="display:flex; flex-wrap:wrap; gap:30px; justify-content:center;">
+            <!-- Why Box -->
+            <div style="background:white; border-radius:10px; padding:30px; box-shadow:0 5px 15px rgba(0,0,0,0.05); flex:1; min-width:300px; max-width:400px; transition:transform 0.3s;"
+                 onmouseover="this.style.transform='translateY(-5px)'"
+                 onmouseout="this.style.transform='translateY(0)'">
+                <h3 style="color:#d32f2f; margin-top:0;">Why Choose FairyCare?</h3>
+                <p style="color:#555; line-height:1.6;">
+                    FairyCare makes blood donation easy and reliable. We connect donors, patients, and blood banks to ensure lifesaving blood
+                    is always available. Our system allows you to donate blood or money, help those in need, and receive timely updates.
+                </p>
+                <a href="#about" style="color:#1976d2; text-decoration:none; font-weight:600; display:inline-flex; align-items:center; gap:5px;">
+                    Learn More →
+                </a>
+            </div>
+
+            <!-- Feature Boxes -->
+            <div style="flex:2; min-width:300px; display:grid; grid-template-columns:repeat(auto-fit, minmax(250px, 1fr)); gap:20px;">
+                <div style="background:white; border-radius:10px; padding:25px; box-shadow:0 5px 15px rgba(0,0,0,0.05); transition:all 0.3s;"
+                     onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 8px 20px rgba(0,0,0,0.1)'"
+                     onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 5px 15px rgba(0,0,0,0.05)'">
+                    <div style="font-size:24px; color:#d32f2f; margin-bottom:15px;">📊</div>
+                    <h4 style="margin-top:0; color:#333;">Real-time Tracking</h4>
+                    <p style="color:#555; line-height:1.5; font-size:14px;">Monitor blood supply levels and urgent needs in your area.</p>
+                </div>
+
+                <div style="background:white; border-radius:10px; padding:25px; box-shadow:0 5px 15px rgba(0,0,0,0.05); transition:all 0.3s;"
+                     onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 8px 20px rgba(0,0,0,0.1)'"
+                     onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 5px 15px rgba(0,0,0,0.05)'">
+                    <div style="font-size:24px; color:#d32f2f; margin-bottom:15px;">🔒</div>
+                    <h4 style="margin-top:0; color:#333;">Secure Process</h4>
+                    <p style="color:#555; line-height:1.5; font-size:14px;">Verified donors and encrypted data handling for safety.</p>
+                </div>
+
+                <div style="background:white; border-radius:10px; padding:25px; box-shadow:0 5px 15px rgba(0,0,0,0.05); transition:all 0.3s;"
+                     onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 8px 20px rgba(0,0,0,0.1)'"
+                     onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 5px 15px rgba(0,0,0,0.05)'">
+                    <div style="font-size:24px; color:#d32f2f; margin-bottom:15px;">🔄</div>
+                    <h4 style="margin-top:0; color:#333;">Instant Alerts</h4>
+                    <p style="color:#555; line-height:1.5; font-size:14px;">Get notifications when your blood type is needed urgently.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    // Simple scroll animation
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            document.querySelector(this.getAttribute('href')).scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
     });
-
-    document.getElementById('imageUpload').addEventListener('change', function(e) {
-        if (e.target.files && e.target.files[0]) {
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                document.getElementById('profileImage').src = event.target.result;
-                document.querySelector('.profile img').src = event.target.result;
-            };
-            reader.readAsDataURL(e.target.files[0]);
-        }
-    });
-</script>-->
+</script>
 </body>
 </html>

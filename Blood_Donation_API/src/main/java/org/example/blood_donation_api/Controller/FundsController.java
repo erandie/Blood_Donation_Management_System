@@ -1,9 +1,11 @@
 package org.example.blood_donation_api.Controller;
 
+import jakarta.validation.Valid;
 import org.example.blood_donation_api.Service.Implementations.FundsServiceImpl;
 import org.example.blood_donation_api.Util.ResponseUtil;
 import org.example.blood_donation_api.dto.FundsDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,6 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/v1/funds")
 @CrossOrigin
+@Validated
 public class FundsController {
 
     @Autowired
@@ -22,7 +25,7 @@ public class FundsController {
     }
 
     @PostMapping("save")
-    public ResponseUtil saveFunds(@RequestBody FundsDTO fundsDTO) {
+    public ResponseUtil saveFunds(@Valid @RequestBody FundsDTO fundsDTO) {
         fundsService.saveFunds(fundsDTO);
         return new ResponseUtil(
                 201,
@@ -32,7 +35,7 @@ public class FundsController {
     }
 
     @PutMapping("update")
-    public ResponseUtil updateFunds(@RequestBody FundsDTO fundsDTO) {
+    public ResponseUtil updateFunds(@Valid @RequestBody FundsDTO fundsDTO) {
         fundsService.updateFunds(fundsDTO);
         return new ResponseUtil(
                 200,
@@ -48,6 +51,16 @@ public class FundsController {
                 200,
                 "fund Deleted!",
                 null
+        );
+    }
+
+    @GetMapping("search")
+    public ResponseUtil searchByDesc(@RequestParam String description) {
+        List<FundsDTO> funds = fundsService.searchByDescription(description);
+        return new ResponseUtil(
+                200,
+                "Here You Goooow!!!!!",
+                funds
         );
     }
 

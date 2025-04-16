@@ -4,9 +4,17 @@ $(document).ready(function () {
     loadPatientIDs();
 });
 
+function getAuthHeaders() {
+    return {
+        "Authorization": localStorage.getItem("token"),
+        "Content-Type": "application/json"
+    };
+}
+
 function loadPaymentMethods() {
     $.ajax({
         url: "http://localhost:8080/api/v1/paymentMethod/get",
+        headers: getAuthHeaders(),
         method: "GET",
         success: function (paymentMethods) {
             console.log("Payment Methods Data:", paymentMethods);
@@ -26,6 +34,7 @@ function loadPaymentMethods() {
 function loadDonorIDs(){
     $.ajax({
         url:"http://localhost:8080/api/v1/donor/get",
+        headers: getAuthHeaders(),
         method: "GET",
         success: function(donors) {
             const selectDonorId = $("#select-donorID");
@@ -46,6 +55,7 @@ function loadDonorIDs(){
 function loadPatientIDs(){
     $.ajax({
         url: "http://localhost:8080/api/v1/patient/get",
+        headers: getAuthHeaders(),
         method: "GET",
         success: function (patients) {
             const selectPatientsId = $("#select-patientID");
@@ -75,6 +85,7 @@ function saveFunds(){
         method: "POST",
         contentType: "application/json",
         url: "http://localhost:8080/api/v1/funds/save",
+        headers: getAuthHeaders(),
         async:true,
         data:JSON.stringify({
             "fundId":fundsId,
@@ -85,19 +96,19 @@ function saveFunds(){
             "patientId": patient_id
         }),
 
-        success:function () {
-            alert("Saved!")
-            getAllFunds();
-            $("#exampleFormControlInput19").val("")
-            $("#exampleFormControlInput20").val("")
-            $("#exampleFormControlInput21").val("")
-            $("#select-paymentMethode").val("")
-            $("#select-donorID").val("")
-            $("#select-patientID").val("")
+        success:function (res) {
+            if (res.code === 201) {
+                alert("saved!")
+                getAllFunds();
+                clearForm();
+            } else {
+                alert("Failed to save: " + res.message);
+            }
         },
 
-        error: function (xhr, exception){
-            alert("Error!")
+        error: function (xhr) {
+            let errMsg = xhr.responseJSON?.message || "Something went wrong!";
+            alert("Error: " + errMsg);
         }
     })
 }
@@ -113,7 +124,7 @@ function updateFunds(){
     $.ajax({
         method: "PUT",
         contentType: "application/json",
-        headers: { "Accept": "application/json" },
+        headers: getAuthHeaders(),
         url: "http://localhost:8080/api/v1/funds/update",
         async:true,
         data:JSON.stringify({
@@ -125,19 +136,19 @@ function updateFunds(){
             "patientId": patient_id
         }),
 
-        success:function () {
-            alert("Updated!")
-            getAllFunds();
-            $("#exampleFormControlInput19").val("")
-            $("#exampleFormControlInput20").val("")
-            $("#exampleFormControlInput21").val("")
-            $("#select-paymentMethode").val("")
-            $("#select-donorID").val("")
-            $("#select-patientID").val("")
+        success: function (res) {
+            if (res.code === 200) {
+                alert("Updated!");
+                getAllFunds();
+                clearForm();
+            } else {
+                alert("Failed to update: " + res.message);
+            }
         },
 
-        error: function (xhr, exception){
-            alert("Error!")
+        error: function (xhr) {
+            let errMsg = xhr.responseJSON?.message || "Something went wrong!";
+            alert("Error: " + errMsg);
         }
     })
 }
@@ -149,6 +160,7 @@ function deleteFunds(){
         method: "DELETE",
         contentType: "application/json",
         url: "http://localhost:8080/api/v1/funds/delete/"+fundsId,
+        headers: getAuthHeaders(),
         async:true,
 
         success:function () {
@@ -174,6 +186,7 @@ function getAllFunds(){
         method: "GET",
         contentType: "application/json",
         url: "http://localhost:8080/api/v1/funds/get",
+        headers: getAuthHeaders(),
         success:function (data) {
             let tableBody = $("#fundsTable");
             tableBody.empty();
@@ -196,6 +209,66 @@ function getAllFunds(){
         }
     })
 }
+
+$(document).ready(function () {
+    let timeOut = null;
+    $('#searchInput').on('input', function () {
+        clearTimeout(timeOut);
+        timeOut = setTimeout(function () {
+            const query = $('#searchInput').val().trim();
+            searchFunds(query);
+            }, 300 );
+        });
+
+    $('#searchInput').on('keypress', function (e) {
+        if (e.which === 13) {
+            e.preventDefault();
+            const query = $('#searchInput').val().trim();
+            searchFunds(query);
+        }
+    });
+
+
+});
+
+function searchFunds(description) {
+    $.ajax({
+        method: "GET",
+        url: "http://localhost:8080/api/v1/funds/search?description=" + encodeURIComponent(description),
+        headers: getAuthHeaders(),
+        success: function (data) {
+            const tableBody = $("#fundsTable");
+            tableBody.empty();
+            data.data.forEach(funds => {
+                tableBody.append(`
+                    <tr>
+                        <td>${funds.fundId}</td>
+                        <td>${funds.description}</td>
+                        <td>${funds.amount}</td>
+                        <td>${funds.paymentMethod}</td>
+                        <td>${funds.donorId}</td>
+                        <td>${funds.patientId}</td>
+                </tr>
+               `)
+            });
+        },
+
+        error: function (xhr){
+            alert("Search Failed!")
+        }
+
+    })
+}
+
+function clearForm(){
+    $("#exampleFormControlInput19").val("")
+    $("#exampleFormControlInput20").val("")
+    $("#exampleFormControlInput21").val("")
+    $("#select-paymentMethode").val("")
+    $("#select-donorID").val("")
+    $("#select-patientID").val("")
+}
+
 $(document).ready(function () {
     $(document).on('click', '#fundsTable tr', function () {
         var col0 = $(this).find('td:eq(0)').text();

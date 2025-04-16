@@ -1,5 +1,6 @@
 package org.example.blood_donation_api.Service.Implementations;
 
+import org.example.blood_donation_api.dto.EmailDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -11,14 +12,15 @@ public class EmailService {
     @Autowired
     private JavaMailSender javaMailSender;
 
-    public void sendEmail(String to, String subject, String text) {
+    public void sendEmail(EmailDTO dto) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("hansierandi7@gmail.com");
-        message.setTo(to);
-        message.setSubject(subject);
-        message.setText(text);
+        message.setTo(dto.getEmail());
+        message.setSubject(dto.getSubject());
+        message.setText("Name: " + dto.getName() + "\n\nMessage: " + dto.getMessage());
 
         javaMailSender.send(message);
     }
+
 
 }

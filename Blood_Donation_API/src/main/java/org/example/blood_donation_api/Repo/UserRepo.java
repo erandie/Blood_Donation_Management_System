@@ -3,6 +3,7 @@ package org.example.blood_donation_api.Repo;
 import org.example.blood_donation_api.Entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UserRepo extends JpaRepository<User, Integer> {
@@ -10,5 +11,7 @@ public interface UserRepo extends JpaRepository<User, Integer> {
     User findByEmail(String userName);
 
     boolean existsByEmail(String userName);
+
+    List<User> findByNameContainingIgnoreCase(String name);
 
 }

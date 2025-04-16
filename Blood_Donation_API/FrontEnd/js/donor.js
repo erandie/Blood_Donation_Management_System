@@ -2,9 +2,18 @@ $(document).ready(function () {
     loadBloodTypes();
 });
 
+function getAuthHeaders() {
+    return {
+        "Authorization": localStorage.getItem("token"),
+        "Content-Type": "application/json"
+    };
+}
+
+
 function loadBloodTypes() {
     $.ajax({
         url: "http://localhost:8080/api/v1/bloodTypes/get",
+        headers: getAuthHeaders(),
         method: "GET",
         success: function (bloodTypes) {
             const bloodTypeSelect = $("#select-bloodType");
@@ -30,6 +39,7 @@ function saveDonor(){
         method:"POST",
         contentType:"application/json",
         url:"http://localhost:8080/api/v1/donor/save",
+        headers: getAuthHeaders(),
         async:true,
         data:JSON.stringify({
             "donorId":"",
@@ -38,18 +48,19 @@ function saveDonor(){
             "address":address,
             "bloodType":bloodType
         }),
-        success:function (data) {
-            alert("saved!")
-            getAllDonor();
-            $("#exampleFormControlInput1").val("");
-            $("#exampleFormControlInput2").val("");
-            $("#exampleFormControlInput3").val("");
-            $("#exampleFormControlInput4").val("");
-            $("#select-bloodBank").val("");
-
+        success:function (res) {
+            if (res.code === 201) {
+                alert("saved!")
+                getAllDonor();
+                clearForm()
+            } else {
+                alert("Failed to save: " + res.message);
+            }
         },
-        error: function (xhr, exception) {
-            alert("Error!")
+
+        error: function (xhr) {
+            let errMsg = xhr.responseJSON?.message || "Something went wrong!";
+            alert("Error: " + errMsg);
         }
     })
 }
@@ -64,7 +75,7 @@ function updateDonor(){
     $.ajax({
         method:"PUT",
         contentType:"application/json",
-        headers: { "Accept": "application/json" },
+        headers: getAuthHeaders(),
         url:"http://localhost:8080/api/v1/donor/update",
         async:true,
         data:JSON.stringify({
@@ -75,18 +86,19 @@ function updateDonor(){
             "bloodType":bloodType
         }),
 
-        success:function (data) {
-            alert("updated!")
-            getAllDonor();
-            $("#exampleFormControlInput1").val("");
-            $("#exampleFormControlInput2").val("");
-            $("#exampleFormControlInput3").val("");
-            $("#exampleFormControlInput4").val("");
-            $("#select-bloodBank").val("");
-
+        success: function (res) {
+            if (res.code === 200) {
+                alert("Updated!");
+                getAllDonor();
+                clearForm();
+            } else {
+                alert("Failed to update: " + res.message);
+            }
         },
-        error: function (xhr, exception) {
-            alert("Error!")
+
+        error: function (xhr) {
+            let errMsg = xhr.responseJSON?.message || "Something went wrong!";
+            alert("Error: " + errMsg);
         }
     })
 }
@@ -97,14 +109,11 @@ function deleteDonor(){
     $.ajax({
         method:"DELETE",
         url:"http://localhost:8080/api/v1/donor/delete/"+donorId,
+        headers: getAuthHeaders(),
         async:true,
         success:function (data) {
             alert("deleted!")
-            $("#exampleFormControlInput1").val("");
-            $("#exampleFormControlInput2").val("");
-            $("#exampleFormControlInput3").val("");
-            $("#exampleFormControlInput4").val("");
-            $("#select-bloodBank").val("");
+            clearForm();
 
             getAllDonor()
         },
@@ -118,6 +127,7 @@ function getAllDonor(){
     $.ajax({
         method:"GET",
         url:"http://localhost:8080/api/v1/donor/get",
+        headers: getAuthHeaders(),
         success:function (data) {
             let tableBody = $("#DonorTable");
             tableBody.empty();
@@ -137,6 +147,61 @@ function getAllDonor(){
             alert("Error!")
         }
     })
+}
+
+$(document).ready(function (){
+    let timeout = null;
+    $('#searchInput').on('input', function (){
+        clearTimeout(timeout);
+        timeout = setTimeout(function (){
+            const query = $('#searchInput').val().trim();
+            searchDonors(query);
+        }, 300);
+    });
+
+    $('#searchInput').on('keypress', function (e){
+        if (e.which === 13){
+            e.preventDefault();
+            const query = $('#searchInput').val().trim();
+            searchDonors(query);
+        }
+    });
+});
+
+function searchDonors(name){
+    $.ajax({
+        method: "GET",
+        url: "http://localhost:8080/api/v1/donor/search?name=" + encodeURIComponent(name),
+        headers:getAuthHeaders(),
+        success:function (data){
+            const tableBody = $("#DonorTable");
+            tableBody.empty();
+            data.data.forEach(donor => {
+                tableBody.append(`
+                    <tr>
+                        <td>${donor.donorId}</td>
+                        <td>${donor.name}</td>
+                        <td>${donor.email}</td>
+                        <td>${donor.address}</td>
+                        <td>${donor.bloodType}</td>
+                    </tr>
+                `);
+            });
+        },
+
+        error: function (xhr){
+            alert("Search Failed!")
+        }
+
+    })
+}
+
+function clearForm(){
+    $("#exampleFormControlInput1").val("");
+    $("#exampleFormControlInput2").val("");
+    $("#exampleFormControlInput3").val("");
+    $("#exampleFormControlInput4").val("");
+    $("#select-bloodBank").val("");
 }
 
 $(document).ready(function () {

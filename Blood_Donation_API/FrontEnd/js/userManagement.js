@@ -2,9 +2,17 @@ $(document).ready(function () {
     loadRoles();
 });
 
+function getAuthHeaders() {
+    return {
+        "Authorization": localStorage.getItem("token"),
+        "Content-Type": "application/json"
+    };
+}
+
 function loadRoles(){
     $.ajax({
         url: "http://localhost:8080/api/v1/role/get",
+        headers: getAuthHeaders(),
         method: "GET",
         success: function (roles){
             const selectRole = $("#select-role");
@@ -38,6 +46,7 @@ function saveUser() {
     $.ajax({
         method: "POST",
         url: "http://localhost:8080/api/v1/user/save",
+        headers: getAuthHeaders(),
         contentType: "application/json",
         dataType: "json",  // ✅ Ensure the response is parsed as JSON
         data: JSON.stringify({
@@ -49,13 +58,19 @@ function saveUser() {
             address: address,
             password: password
         }),
-        success: function (data) {
-            alert("Saved!");
-            getAllUsers();
-            clearFields();
+        success:function (res) {
+            if (res.code === 201) {
+                alert("saved!")
+                getAllUsers();
+                clearForm();
+            } else {
+                alert("Failed to save: " + res.message);
+            }
         },
+
         error: function (xhr) {
-            alert("Error: " + xhr.responseText);  // ✅ Show the actual error message
+            let errMsg = xhr.responseJSON?.message || "Something went wrong!";
+            alert("Error: " + errMsg);
         }
     });
 }
@@ -79,7 +94,7 @@ function updateUser(){
     $.ajax({
         method:"PUT",
         contentType:"application/json",
-        headers: { "Accept": "application/json" },
+        headers: getAuthHeaders(),
         url: `http://localhost:8080/api/v1/user/update/${userId}`,
         async:true,
         data:JSON.stringify({
@@ -91,12 +106,19 @@ function updateUser(){
             "address":address,
             "password":password
         }),
-        success: function (data) {
-            alert("User updated successfully!");
-            getAllUsers();
+        success: function (res) {
+            if (res.code === 200) {
+                alert("Updated!");
+                getAllUsers();
+                clearForm();
+            } else {
+                alert("Failed to update: " + res.message);
+            }
         },
-        error: function (xhr, exception) {
-            alert("Error!")
+
+        error: function (xhr) {
+            let errMsg = xhr.responseJSON?.message || "Something went wrong!";
+            alert("Error: " + errMsg);
         }
     })
 }
@@ -107,6 +129,7 @@ function deleteUser(){
     $.ajax({
         method:"DELETE",
         url:"http://localhost:8080/api/v1/user/delete/"+userId,
+        headers: getAuthHeaders(),
         async:true,
         success:function (data) {
             alert("deleted!")
@@ -124,6 +147,7 @@ function getAllUsers(){
     $.ajax({
         method:"GET",
         url:"http://localhost:8080/api/v1/user/get",
+        headers: getAuthHeaders(),
         success:function (data) {
             let tableBody = $("#userTable");
             tableBody.empty();
@@ -149,6 +173,60 @@ function getAllUsers(){
         error: function (xhr, exception) {
             alert("Error!")
         }
+    })
+}
+
+$(document).ready(function (){
+    let timeout = null;
+    $('#searchInput').on('input', function (){
+        clearTimeout(timeout);
+        timeout = setTimeout(function (){
+            const query = $('#searchInput').val().trim();
+            searchUsers(query);
+        }, 300);
+    });
+
+    $('#searchInput').on('keypress', function (e){
+        if (e.which === 13){
+            e.preventDefault();
+            const query = $('#searchInput').val().trim();
+            searchUsers(query);
+        }
+    });
+});
+
+function searchUsers(name){
+    $.ajax({
+        method: "GET",
+        url: "http://localhost:8080/api/v1/user/search?name=" + encodeURIComponent(name),
+        headers:getAuthHeaders(),
+        success:function (data){
+            const tableBody = $("#userTable");
+            tableBody.empty();
+            data.data.forEach(user => {
+                tableBody.append(`
+                    <tr>
+                        <td>${user.userId}</td>
+                        <td>${user.name}</td>
+                        <td>${user.role}</td>
+                        <td>${user.email}</td>
+                        <td>${user.mobile}</td>
+                        <td>${user.address}</td>
+                        <td id="status-${user.id}">${user.active ? "✅ Active" : "❌ Inactive"}</td>
+                        <td>
+                                <button class="toggle-btn" data-id="${user.id}" data-status="${user.active}">
+                                    ${user.active ? "Deactivate" : "Activate"}
+                                </button>
+                            </td>
+                    </tr>
+                `);
+            });
+        },
+
+        error: function (xhr){
+            alert("Search Failed!")
+        }
+
     })
 }
 
@@ -189,6 +267,7 @@ $(document).on("click", ".toggle-btn", function () {
 
     $.ajax({
         url: `http://localhost:8080/api/v1/user/update/${userId}/status`,
+        headers: getAuthHeaders(),
         type: "PUT",
         contentType: "application/json",
         data: JSON.stringify({ active: newStatus }),

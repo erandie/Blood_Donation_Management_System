@@ -4,10 +4,19 @@ $(document).ready(function () {
     loadEmployeeIDs();
 });
 
+function getAuthHeaders() {
+    return {
+        "Authorization": localStorage.getItem("token"),
+        "Content-Type": "application/json"
+    };
+}
+
+
 function loadBloodTypes() {
     $.ajax({
         url: "http://localhost:8080/api/v1/bloodTypes/get",
         method: "GET",
+        headers: getAuthHeaders(),
         success: function (bloodTypes) {
             const bloodTypeSelect = $("#select-bloodType");
             bloodTypeSelect.empty();
@@ -25,6 +34,7 @@ function loadBloodTypes() {
 function loadDonorIDs(){
     $.ajax({
         url:"http://localhost:8080/api/v1/donor/get",
+        headers: getAuthHeaders(),
         method: "GET",
         success: function(donors) {
             const selectDonorId = $("#select-donorID");
@@ -45,6 +55,7 @@ function loadDonorIDs(){
 function loadEmployeeIDs(){
     $.ajax({
         url:"http://localhost:8080/api/v1/employee/get",
+        headers: getAuthHeaders(),
         method:"GET",
         success: function (employees){
             const selectEmpId = $("#select-empID");
@@ -72,6 +83,7 @@ function saveDetails(){
         method: "POST",
         contentType:"application/json",
         url:"http://localhost:8080/api/v1/donation/save",
+        headers: getAuthHeaders(),
         async:true,
         data:JSON.stringify({
             "donationId":"",
@@ -82,24 +94,31 @@ function saveDetails(){
             "selectedDate":date
         }),
 
-        success:function (data) {
-            alert("Saved!")
-            getAllDonations();
-            $("#donationID").val("")
-            $("#select-donorID").val("")
-            $("#exampleFormControlInput1").val("")
-            $("#select-bloodType").val("")
-            $("#select-empID").val("")
-            $("#datePicker").val("")
-
+        success:function (res) {
+            if (res.code === 201) {
+                alert("saved!")
+                getAllDonations();
+                clearForm()
+            } else {
+                alert("Failed to save: " + res.message);
+            }
 
         },
-
-        error: function (xhr, exception) {
-            alert("Error!")
+        error: function (xhr) {
+            let errMsg = xhr.responseJSON?.message || "Something went wrong!";
+            alert("Error: " + errMsg);
         }
 
     })
+}
+
+function clearForm(){
+    $("#donationID").val("")
+    $("#select-donorID").val("")
+    $("#exampleFormControlInput1").val("")
+    $("#select-bloodType").val("")
+    $("#select-empID").val("")
+    $("#datePicker").val("")
 }
 
 function updateDetails(){
@@ -113,7 +132,7 @@ function updateDetails(){
     $.ajax({
         method: "PUT",
         contentType:"application/json",
-        headers: { "Accept": "application/json" },
+        headers: getAuthHeaders(),
         url:"http://localhost:8080/api/v1/donation/update",
         async:true,
         data:JSON.stringify({
@@ -125,19 +144,19 @@ function updateDetails(){
             "selectedDate":date
         }),
 
-        success:function (data) {
-            alert("Updated!")
-            getAllDonations();
-            $("#donationID").val("")
-            $("#select-donorID").val("")
-            $("#exampleFormControlInput1").val("")
-            $("#select-bloodType").val("")
-            $("#select-empID").val("")
-            $("#datePicker").val("")
+        success: function (res) {
+            if (res.code === 200) {
+                alert("Updated!");
+                getAllDonations();
+                clearForm();
+            } else {
+                alert("Failed to update: " + res.message);
+            }
         },
 
-        error: function (xhr, exception) {
-            alert("Error!")
+        error: function (xhr) {
+            let errMsg = xhr.responseJSON?.message || "Something went wrong!";
+            alert("Error: " + errMsg);
         }
     })
 }
@@ -148,6 +167,7 @@ function deleteDetails() {
     $.ajax({
         method: "DELETE",
         url: "http://localhost:8080/api/v1/donation/delete/" + donationId,
+        headers: getAuthHeaders(),
         async: true,
 
         success: function (data) {
@@ -172,6 +192,7 @@ function getAllDonations(){
     $.ajax({
         method: "GET",
         url:"http://localhost:8080/api/v1/donation/get",
+        headers: getAuthHeaders(),
         success:function (data) {
             let tableBody = $("#donationTable");
             tableBody.empty();
@@ -182,7 +203,7 @@ function getAllDonations(){
                     <td>${donation.donorId}</td>
                     <td>${donation.bloodPoints}</td>
                     <td>${donation.bloodType}</td>
-                    <td>${donation.empId}</td>
+                    <!-- <td>${donation.empId}</td> -->
                     <td>${donation.selectedDate}</td>
                     
                     
@@ -197,23 +218,77 @@ function getAllDonations(){
     })
 }
 
-$(document).ready(function () {
-    $(document).on('click', '#donationTable tr', function () {
-        var col0 = $(this).find('td:eq(0)').text();
-        var col1 = $(this).find('td:eq(1)').text();
-        var col2 = $(this).find('td:eq(2)').text();
-        var col3 = $(this).find('td:eq(3)').text();
-        var col4 = $(this).find('td:eq(4)').text();
-        var col5 = $(this).find('td:eq(5)').text();
+$(document).ready(function (){
+    let timeout = null;
+    $('#searchInput').on('input', function (){
+        clearTimeout(timeout);
+        timeout = setTimeout(function (){
+            const query = $('#searchInput').val().trim();
+            searchDonations(query);
+        }, 300);
+    });
 
-        $('#donationID').val(col0);
-        $('#exampleFormControlInput1').val(col1);
-        $('#select-bloodType').val(col2);
-        $('#datePicker').val(col3);
-        $('#select-donorID').val(col4);
-        $('#select-empID').val(col5);
+    $('#searchInput').on('keypress', function (e){
+        if (e.which === 13){
+            e.preventDefault();
+            const query = $('#searchInput').val().trim();
+            searchDonations(query);
+        }
+    });
+});
+
+function searchDonations(donationId){
+    console.log("Searching for donationId:", donationId);
+    $.ajax({
+        method: "GET",
+        url: "http://localhost:8080/api/v1/donation/search?donationId=" + encodeURIComponent(donationId),
+        headers:getAuthHeaders(),
+        success:function (data){
+            console.log("Response:", data);
+            const tableBody = $("#donationTable");
+            tableBody.empty();
+            const donation = data.data || data;
+
+            const donations = Array.isArray(donation) ? donation : [donation];
+
+            donations.forEach(donation => {
+                tableBody.append(`
+                    <tr>
+                        <td>${donation.donationId}</td>
+                        <td>${donation.donorId}</td>
+                        <td>${donation.bloodPoints}</td>
+                        <td>${donation.bloodType}</td>
+                        <td>${donation.empId}</td>
+                        <td>${donation.selectedDate}</td>
+                    </tr>
+                `)
+            });
+
+        },
+
+        error: function (xhr){
+            alert("Search Failed!")
+        }
 
     })
+}
+
+$(document).ready(function () {
+    $(document).on('click', '#donationTable tr', function () {
+        let col0 = $(this).find('td:eq(0)').text();
+        let col1 = $(this).find('td:eq(1)').text();
+        let col2 = $(this).find('td:eq(2)').text();
+        let col3 = $(this).find('td:eq(3)').text();
+        let col4 = $(this).find('td:eq(4)').text();
+        let col5 = $(this).find('td:eq(5)').text();
+
+        $('#donationID').val(col0);
+        $('#select-donorID').val(col1);
+        $('#exampleFormControlInput1').val(col2);
+        $('#select-bloodType').val(col3);
+        $('#select-empID').val(col4);
+        $('#datePicker').val(col5);
+    });
 })
 
 

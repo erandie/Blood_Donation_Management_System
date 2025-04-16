@@ -5,6 +5,7 @@ import org.example.blood_donation_api.Entity.Funds;
 import org.example.blood_donation_api.Repo.DonorRepo;
 import org.example.blood_donation_api.Repo.FundsRepo;
 import org.example.blood_donation_api.Service.DonorService;
+import org.example.blood_donation_api.dto.DonationDTO;
 import org.example.blood_donation_api.dto.DonorDTO;
 import org.example.blood_donation_api.dto.FundsDTO;
 import org.modelmapper.ModelMapper;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class DonorServiceImpl implements DonorService {
@@ -67,6 +69,13 @@ public class DonorServiceImpl implements DonorService {
 
     public long donorCount(){
         return donorRepo.count();
+    }
+
+    public List<DonorDTO> searchByName(String name){
+        return donorRepo.findByNameContainingIgnoreCase(name)
+                .stream()
+                .map(donor -> modelMapper.map(donor, DonorDTO.class))
+                .collect(Collectors.toList());
     }
 
 

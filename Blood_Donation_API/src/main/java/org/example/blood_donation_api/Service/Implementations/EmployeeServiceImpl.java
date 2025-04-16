@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -48,6 +49,13 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public void deleteEmployee(Integer empId) {
         employeeRepo.deleteById(empId);
+    }
+
+    public List<EmployeeDTO> searchByName(String name){
+        return employeeRepo.findByNameContainingIgnoreCase(name)
+                .stream()
+                .map(employee -> modelMapper.map(employee, EmployeeDTO.class))
+                .collect(Collectors.toList());
     }
 
 }

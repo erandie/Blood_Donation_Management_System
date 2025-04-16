@@ -5,6 +5,7 @@ import org.example.blood_donation_api.Entity.Role;
 import org.example.blood_donation_api.Entity.User;
 import org.example.blood_donation_api.Repo.UserRepo;
 import org.example.blood_donation_api.Service.UserService;
+import org.example.blood_donation_api.Util.VarList;
 import org.example.blood_donation_api.dto.UserDTO;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -21,6 +22,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -40,15 +42,17 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public void saveUsers(UserDTO userDTO) {
+    public int saveUsers(UserDTO userDTO) {
         if (userRepo.existsByEmail(userDTO.getEmail())){
-            throw new RuntimeException("User Already Exists!");
-        }
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            return VarList.Not_Acceptable;
+        } else {
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-            userDTO.setRole(Role.USER);
+            userDTO.setRole(userDTO.getRole());
             userRepo.save(modelMapper.map(userDTO, User.class));
+            return VarList.Created;
         }
+    }
 
 
     @Override
@@ -89,6 +93,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     public UserDTO loadUserDetailsByUSerName(String userName){
         User user = userRepo.findByEmail(userName);
+        user.setRole(user.getRole());
+
+        List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(user.getRole().name()));
+
         return modelMapper.map(user, UserDTO.class);
     }
 
@@ -111,6 +119,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepo.findByEmail(email);
         return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), getAuthority(user));
+    }
+
+    public List<UserDTO> searchByName(String name) {
+        return userRepo.findByNameContainingIgnoreCase(name)
+                .stream()
+                .map(user -> modelMapper.map(user, UserDTO.class))
+                .collect(Collectors.toList());
     }
 }
 

@@ -1,9 +1,11 @@
 package org.example.blood_donation_api.Controller;
 
+import jakarta.validation.Valid;
 import org.example.blood_donation_api.Service.Implementations.ReceptionistServiceImpl;
 import org.example.blood_donation_api.Util.ResponseUtil;
 import org.example.blood_donation_api.dto.ReceptionistDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,6 +13,7 @@ import java.util.List;
 @CrossOrigin
 @RestController
 @RequestMapping("api/v1/receptionist")
+@Validated
 public class ReceptionistController {
 
     @Autowired
@@ -22,7 +25,7 @@ public class ReceptionistController {
     }
 
     @PostMapping("save")
-    public ResponseUtil saveReceptionist(@RequestBody ReceptionistDTO receptionistDTO){
+    public ResponseUtil saveReceptionist(@Valid @RequestBody ReceptionistDTO receptionistDTO){
         receptionistService.saveReceptionist(receptionistDTO);
         return new ResponseUtil(
                 201,
@@ -32,7 +35,7 @@ public class ReceptionistController {
     }
 
     @PutMapping("update")
-    public ResponseUtil updateReceptionists(@RequestBody ReceptionistDTO receptionistDTO) {
+    public ResponseUtil updateReceptionists(@Valid @RequestBody ReceptionistDTO receptionistDTO) {
         receptionistService.updateReceptionist(receptionistDTO);
         return new ResponseUtil(
                 200,
@@ -51,4 +54,45 @@ public class ReceptionistController {
         );
     }
 
+    @GetMapping("search")
+    public ResponseUtil searchReceptionist(@RequestParam String name){
+        List<ReceptionistDTO> receptionists = receptionistService.searchByName(name);
+        return new ResponseUtil(
+                200,
+                "Here You Goooow!!!!!",
+                receptionists
+        );
+    }
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
