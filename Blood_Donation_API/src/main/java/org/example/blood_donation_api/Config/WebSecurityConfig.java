@@ -63,7 +63,6 @@ public class WebSecurityConfig {
                         ).permitAll()
                         .requestMatchers("/api/v1/dashboard/admin").hasAuthority("ADMIN")
                         .requestMatchers("/api/v1/dashboard/user").hasAuthority("USER")
-                        .requestMatchers("/api/v1/employee/**").hasAuthority("ADMIN")
                         .requestMatchers("/api/v1/bloodBank/**").hasAnyAuthority("ADMIN", "USER")
                         .anyRequest().authenticated()
                 ).
