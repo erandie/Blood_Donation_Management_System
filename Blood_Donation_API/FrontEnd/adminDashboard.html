@@ -40,10 +40,11 @@
             box-sizing: border-box;
             font-family: 'Poppins', sans-serif;
             animation: fadeInUp 0.8s ease-out;
+
         }
 
         body {
-            background-color: var(--bg);
+            background-color: #fce4ec;
             color: var(--text);
             line-height: 1.6;
         }
@@ -155,7 +156,7 @@
         .main-content {
             flex: 1;
             padding: 25px;
-            background-color: var(--bg);
+            background-color: #fce4ec;
         }
 
         /* Top Navigation */
@@ -547,12 +548,12 @@
             <li><a href="funds.html"><i class="fas fa-tint"></i> <span>Funds</span></a></li>
             <li><a href="user.html"><i class="fas fa-tint"></i> <span>USers</span></a></li>
             <li><a href="#"><i class="fas fa-calendar-alt"></i> <span>Appointments</span></a></li>
-            <li><a href="#"><i class="fas fa-cog"></i> <span>Settings</span></a></li>
+            <li><a href="#"><i class="fas fa-cog"></i> <span>Log Out</span></a></li>
         </ul>
     </div>
 
     <!-- Main Content -->
-    <div class="main-content">
+    <div class="main-content" id="main-content">
         <!-- Top Navigation -->
         <div class="top-nav">
             <div class="search">
@@ -644,6 +645,13 @@
 <script>
     document.querySelectorAll('.menu a').forEach(link => {
         link.addEventListener('click', async function (e) {
+
+
+
+            const url1 = this.getAttribute('href');
+
+            if (url1.includes("bloodBank.html")) return;
+
             e.preventDefault();
 
             document.querySelectorAll('.menu li').forEach(li => li.classList.remove('active'));
@@ -663,6 +671,12 @@
                 setTimeout(() => {
                     if (document.querySelector("#select-bloodType")) loadBloodTypes();
                     if (document.querySelector("#select-role")) loadRoles();
+                    if (document.querySelector("#select-bloodBank")) loadBloodBankID();
+                    if (document.querySelector("#select-empID")) loadEmployeeIDs();
+                    if (document.querySelector("#select-donorID")) loadDonorIDs();
+                    if (document.querySelector("#select-paymentMethode")) loadPaymentMethods();
+                    if (document.querySelector("#select-patientID")) loadPatientIDs();
+
 
                     if (document.querySelector("#searchInput")) {
                         setupEmployeeSearch();
@@ -672,21 +686,16 @@
                         setupPatientSearch();
                         setupReceptionistSearch();
                         setupUsersSearch();
+                        setupBloodBankSearch();
                     }
 
-                    if (document.querySelector("#select-bloodBank")) loadBloodBankID();
-                    if (document.querySelector("#select-empID")) loadEmployeeIDs();
-                    if (document.querySelector("#select-donorID")) loadDonorIDs();
-                    if (document.querySelector("#select-paymentMethode")) loadPaymentMethods();
-                    if (document.querySelector("#select-patientID")) loadPatientIDs();
-                    if (document.querySelector("#select-location")) loadLocations();
-                    if (document.querySelector("#select-patient")) loadPatients();
 
                     if (document.querySelector(".datePicker")) {
                         flatpickr(".datePicker", {
-                            dateFormat: "Y-m-d" // format: 2025-03-18
+                            dateFormat: "Y-m-d"
                         });
                     }
+
 
                     if (url.includes("bloodBank")) initBloodBankForm();
 
