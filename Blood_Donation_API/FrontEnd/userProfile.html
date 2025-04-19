@@ -23,6 +23,7 @@
 
         body {
             background-color: #f5f5f5;
+            animation: fadeInUp 0.8s ease-out;
         }
 
         .dashboard {
@@ -42,12 +43,14 @@
         .sidebar-header {
             padding: 0 20px 20px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeInUp 0.8s ease-out;
         }
 
         .sidebar-header h3 {
             color: var(--white);
             font-size: 1.5rem;
             margin-bottom: 5px;
+            animation: fadeInUp 0.8s ease-out;
         }
 
         .sidebar-header p {
@@ -99,6 +102,7 @@
             margin-bottom: 30px;
             padding-bottom: 15px;
             border-bottom: 1px solid #ddd;
+            animation: fadeInUp 0.8s ease-out;
         }
 
         .header h1 {
@@ -156,17 +160,20 @@
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
             padding: 30px;
             margin-bottom: 30px;
+            animation: fadeInUp 0.8s ease-out;
         }
 
         .profile-header {
             display: flex;
             align-items: center;
             margin-bottom: 30px;
+            animation: fadeInUp 0.8s ease-out;
         }
 
         .profile-image {
             position: relative;
             margin-right: 30px;
+            animation: fadeInUp 0.8s ease-out;
         }
 
         .profile-image img {
@@ -195,6 +202,7 @@
         .profile-info h2 {
             color: var(--dark);
             margin-bottom: 10px;
+            animation: fadeInUp 0.8s ease-out;
         }
 
         .profile-info .role-badge {
@@ -206,17 +214,20 @@
             font-size: 0.8rem;
             font-weight: bold;
             margin-bottom: 15px;
+            animation: fadeInUp 0.8s ease-out;
         }
 
         .profile-info p {
             color: #666;
             margin-bottom: 5px;
+            animation: fadeInUp 0.8s ease-out;
         }
 
         .profile-info p i {
             margin-right: 10px;
             color: var(--primary);
             width: 20px;
+            animation: fadeInUp 0.8s ease-out;
         }
 
         /* Profile Form Styles */
@@ -279,6 +290,33 @@
             font-size: 1rem;
         }
 
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(230, 57, 70, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(230, 57, 70, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(230, 57, 70, 0);
+            }
+        }
+
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+
         .btn-primary {
             background-color: var(--primary);
             color: white;
@@ -322,6 +360,8 @@
                 flex-direction: column;
                 gap: 0;
             }
+
+
         }
     </style>
 </head>

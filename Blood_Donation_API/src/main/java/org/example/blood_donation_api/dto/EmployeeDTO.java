@@ -30,7 +30,7 @@ public class EmployeeDTO {
 
     private Integer bloodBankId;
 
-    private Integer donationId;
+    /*private Integer donationId;*/
 
 }
 

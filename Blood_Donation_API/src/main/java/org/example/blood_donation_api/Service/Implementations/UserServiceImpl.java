@@ -127,6 +127,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 .map(user -> modelMapper.map(user, UserDTO.class))
                 .collect(Collectors.toList());
     }
+
+    public UserDTO getUsernameByUserDTO(String email) {
+        User user = userRepo.findByEmailContainingIgnoreCase(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        /*user.setPassword(null);*/
+        return modelMapper.map(user, UserDTO.class);
+    }
+
 }
 
 

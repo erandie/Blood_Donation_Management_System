@@ -10,7 +10,6 @@ public class BloodDonationApiApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(BloodDonationApiApplication.class, args);
-
     }
 
 }

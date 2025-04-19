@@ -33,6 +33,7 @@
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
             overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
         }
 
         .card-header {
@@ -40,6 +41,7 @@
             color: white;
             padding: 1.25rem;
             border-bottom: none;
+            animation: fadeInUp 0.8s ease-out;
         }
 
         .form-control, .form-select {
@@ -47,6 +49,7 @@
             padding: 10px 15px;
             border: 1px solid #e0e0e0;
             transition: all 0.3s;
+            animation: fadeInUp 0.8s ease-out;
         }
 
         .form-control:focus, .form-select:focus {
@@ -59,6 +62,7 @@
             padding: 10px 20px;
             font-weight: 500;
             transition: all 0.3s;
+            animation: fadeInUp 0.8s ease-out;
         }
 
         .btn-primary {
@@ -89,11 +93,13 @@
         .table {
             border-radius: 12px;
             overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
         }
 
         .table thead {
             background-color: var(--primary);
             color: white;
+            animation: fadeInUp 0.8s ease-out;
         }
 
         .table th {
@@ -103,6 +109,7 @@
 
         .table td {
             vertical-align: middle;
+            animation: fadeInUp 0.8s ease-out;
         }
 
         .action-btns .btn {
@@ -121,6 +128,7 @@
             margin-bottom: 30px;
             position: relative;
             padding-bottom: 10px;
+            animation: fadeInUp 0.8s ease-out;
         }
 
         .page-title::after {
@@ -148,6 +156,33 @@
         .status-inactive {
             background-color: rgba(231, 111, 81, 0.1);
             color: var(--danger);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(230, 57, 70, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(230, 57, 70, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(230, 57, 70, 0);
+            }
+        }
+
+        .pulse-animation {
+            animation: pulse 2s infinite;
         }
 
         @media (max-width: 768px) {
@@ -202,14 +237,14 @@
 
                         <div class="mb-3">
                             <label for="datePicker" class="form-label">Select Date:</label>
-                            <input type="text" id="datePicker" class="form-control">
+                            <input type="text" id="datePicker" class="form-control datePicker">
                         </div><br>
 
                         <div class="d-flex justify-content-between">
                             <button type="button" class="btn btn-primary" onclick="saveDetails()">Save</button>
                             <button type="button" class="btn btn-secondary" onclick="updateDetails()">Update</button>
                             <button type="button" class="btn btn-danger" onclick="deleteDetails()">Delete</button>
-                            <button type="button" class="btn btn-success" onclick="getAllDonations()">Load Table</button>
+                            <button type="button" class="btn btn-success" onclick="getAllDonations_ii()">Load Table</button>
                         </div>
                     </form>
                 </div>
@@ -237,7 +272,7 @@
                                     <th scope="col">Donor ID</th>
                                     <th scope="col">Blood Points</th>
                                     <th scope="col">Blood Type</th>
-                                    <!--<th scope="col">Employee ID</th>-->
+                                    <th scope="col">Employee ID</th>
                                     <th scope="col">Date</th>
                                 </tr>
                             </thead>

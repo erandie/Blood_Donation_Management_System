@@ -58,6 +58,9 @@ public class WebSecurityConfig {
                                 "/api/v1/user/save",
                                 "/v3/api-docs/**",
                                 "/api/v1/email/send",
+                                "/api/v1/email/save",
+                                "/api/v1/email/inbox",
+                                "/api/v1/email/delete/{id}",
                                 "/swagger-ui/**",
                                 "/swagger-ui.html"
                         ).permitAll()

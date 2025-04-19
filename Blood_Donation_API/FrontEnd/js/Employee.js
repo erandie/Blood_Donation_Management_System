@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    loadBloodBankIDs();
+    loadBloodBankID();
 });
 
 function getAuthHeaders() {
@@ -10,7 +10,7 @@ function getAuthHeaders() {
 }
 
 
-function loadBloodBankIDs() {
+function loadBloodBankID() {
     $.ajax({
         url: "http://localhost:8080/api/v1/bloodBank/get",
         method: "GET",
@@ -197,24 +197,25 @@ $(document).ready(function () {
     })
 })
 
-$(document).ready(function (){
+function setupEmployeeSearch() {
     let timeout = null;
-    $('#searchInput').on('input', function (){
+    $('#searchInput').on('input', function () {
         clearTimeout(timeout);
-        timeout = setTimeout(function (){
+        timeout = setTimeout(function () {
             const query = $('#searchInput').val().trim();
             searchEmployees(query);
         }, 300);
     });
 
-    $('#searchInput').on('keypress', function (e){
-        if (e.which === 13){
+    $('#searchInput').on('keypress', function (e) {
+        if (e.which === 13) {
             e.preventDefault();
             const query = $('#searchInput').val().trim();
             searchEmployees(query);
         }
     });
-});
+}
+
 
 function searchEmployees(name){
     $.ajax({

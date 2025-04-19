@@ -122,7 +122,7 @@ function getAllReceptionists(){
     })
 }
 
-$(document).ready(function (){
+function setupReceptionistSearch() {
     let timeout = null;
     $('#searchInput').on('input', function (){
         clearTimeout(timeout);
@@ -139,7 +139,7 @@ $(document).ready(function (){
             searchReceptionist(query);
         }
     });
-});
+}
 
 function searchReceptionist(name){
     $.ajax({

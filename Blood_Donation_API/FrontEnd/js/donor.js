@@ -149,7 +149,7 @@ function getAllDonor(){
     })
 }
 
-$(document).ready(function (){
+function setupDonorSearch() {
     let timeout = null;
     $('#searchInput').on('input', function (){
         clearTimeout(timeout);
@@ -166,7 +166,7 @@ $(document).ready(function (){
             searchDonors(query);
         }
     });
-});
+}
 
 function searchDonors(name){
     $.ajax({

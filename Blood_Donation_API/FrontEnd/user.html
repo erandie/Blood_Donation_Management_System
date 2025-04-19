@@ -24,6 +24,7 @@
             font-family: 'Poppins', sans-serif;
             background-color: #f5f7fa;
             color: var(--text);
+            animation: fadeInUp 0.8s ease-out;
         }
 
         .card {
@@ -31,6 +32,7 @@
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
             overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
         }
 
         .card-header {
@@ -38,6 +40,7 @@
             color: white;
             padding: 1.25rem;
             border-bottom: none;
+            animation: fadeInUp 0.8s ease-out;
         }
 
         .form-control, .form-select {
@@ -45,6 +48,7 @@
             padding: 10px 15px;
             border: 1px solid #e0e0e0;
             transition: all 0.3s;
+            animation: fadeInUp 0.8s ease-out;
         }
 
         .form-control:focus, .form-select:focus {
@@ -57,6 +61,7 @@
             padding: 10px 20px;
             font-weight: 500;
             transition: all 0.3s;
+            animation: fadeInUp 0.8s ease-out;
         }
 
         .btn-primary {
@@ -87,6 +92,7 @@
         .table {
             border-radius: 12px;
             overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
         }
 
         .table thead {
@@ -101,6 +107,7 @@
 
         .table td {
             vertical-align: middle;
+            animation: fadeInUp 0.8s ease-out;
         }
 
         .action-btns .btn {
@@ -119,6 +126,7 @@
             margin-bottom: 30px;
             position: relative;
             padding-bottom: 10px;
+            animation: fadeInUp 0.8s ease-out;
         }
 
         .page-title::after {
@@ -129,6 +137,7 @@
             width: 60px;
             height: 3px;
             background-color: var(--primary);
+            animation: fadeInUp 0.8s ease-out;
         }
 
         .status-badge {
@@ -146,6 +155,33 @@
         .status-inactive {
             background-color: rgba(231, 111, 81, 0.1);
             color: var(--danger);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(230, 57, 70, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(230, 57, 70, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(230, 57, 70, 0);
+            }
+        }
+
+        .pulse-animation {
+            animation: pulse 2s infinite;
         }
 
         @media (max-width: 768px) {
@@ -270,7 +306,7 @@
                                 <th scope="col">Email</th>
                                 <th scope="col">Mobile</th>
                                 <th scope="col">Address</th>
-                                <th>Action</th>
+                                <!--<th>Action</th>-->
 
                             </tr>
                             </thead>

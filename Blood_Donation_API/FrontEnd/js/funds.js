@@ -210,7 +210,7 @@ function getAllFunds(){
     })
 }
 
-$(document).ready(function () {
+function setupFundsSearch() {
     let timeOut = null;
     $('#searchInput').on('input', function () {
         clearTimeout(timeOut);
@@ -227,9 +227,7 @@ $(document).ready(function () {
             searchFunds(query);
         }
     });
-
-
-});
+}
 
 function searchFunds(description) {
     $.ajax({

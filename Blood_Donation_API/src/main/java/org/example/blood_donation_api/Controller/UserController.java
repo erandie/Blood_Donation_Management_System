@@ -1,5 +1,6 @@
 package org.example.blood_donation_api.Controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.example.blood_donation_api.Entity.User;
 import org.example.blood_donation_api.Service.Implementations.UserServiceImpl;
@@ -123,6 +124,15 @@ public class UserController {
                 users
         );
     }
+
+    @GetMapping("info")
+    public ResponseEntity<UserDTO> getLoggedUserInfo(HttpServletRequest request) {
+        String email = jwtUtil.extractUsernameFromRequest(request);
+        UserDTO user = userService.getUsernameByUserDTO(email);
+        return ResponseEntity.ok(user);
+    }
+
+
 
 
 

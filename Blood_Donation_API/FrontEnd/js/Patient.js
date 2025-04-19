@@ -148,7 +148,7 @@ function getAllPatient(){
     })
 }
 
-$(document).ready(function (){
+function setupPatientSearch() {
     let timeout = null;
     $('#searchInput').on('input', function (){
         clearTimeout(timeout);
@@ -165,7 +165,7 @@ $(document).ready(function (){
             searchPatients(query);
         }
     });
-});
+}
 
 function searchPatients(name){
     $.ajax({

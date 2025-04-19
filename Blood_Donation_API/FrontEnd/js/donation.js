@@ -11,7 +11,6 @@ function getAuthHeaders() {
     };
 }
 
-
 function loadBloodTypes() {
     $.ajax({
         url: "http://localhost:8080/api/v1/bloodTypes/get",
@@ -97,7 +96,7 @@ function saveDetails(){
         success:function (res) {
             if (res.code === 201) {
                 alert("saved!")
-                getAllDonations();
+                getAllDonations_ii();
                 clearForm()
             } else {
                 alert("Failed to save: " + res.message);
@@ -110,15 +109,6 @@ function saveDetails(){
         }
 
     })
-}
-
-function clearForm(){
-    $("#donationID").val("")
-    $("#select-donorID").val("")
-    $("#exampleFormControlInput1").val("")
-    $("#select-bloodType").val("")
-    $("#select-empID").val("")
-    $("#datePicker").val("")
 }
 
 function updateDetails(){
@@ -147,7 +137,7 @@ function updateDetails(){
         success: function (res) {
             if (res.code === 200) {
                 alert("Updated!");
-                getAllDonations();
+                getAllDonations_ii();
                 clearForm();
             } else {
                 alert("Failed to update: " + res.message);
@@ -179,7 +169,7 @@ function deleteDetails() {
             $("#select-empID").val("")
             $("#datePicker").val("")
 
-            getAllDonations();
+            getAllDonations_ii();
         },
 
         error: function (xhr, exception) {
@@ -188,12 +178,13 @@ function deleteDetails() {
     })
 }
 
-function getAllDonations(){
+function getAllDonations_ii(){
     $.ajax({
         method: "GET",
         url:"http://localhost:8080/api/v1/donation/get",
         headers: getAuthHeaders(),
         success:function (data) {
+            console.log(data);
             let tableBody = $("#donationTable");
             tableBody.empty();
             data.forEach(donation => {
@@ -201,12 +192,10 @@ function getAllDonations(){
                 <tr>
                     <td>${donation.donationId}</td>
                     <td>${donation.donorId}</td>
-                    <td>${donation.bloodPoints}</td>
+                    <td>${donation.bloodPoints + "milliliters"}</td>
                     <td>${donation.bloodType}</td>
-                    <!-- <td>${donation.empId}</td> -->
+                    <td>${donation.empId}</td>
                     <td>${donation.selectedDate}</td>
-                    
-                    
                 </tr>
                 `)
             });
@@ -218,7 +207,16 @@ function getAllDonations(){
     })
 }
 
-$(document).ready(function (){
+function clearForm(){
+    $("#donationID").val("")
+    $("#select-donorID").val("")
+    $("#exampleFormControlInput1").val("")
+    $("#select-bloodType").val("")
+    $("#select-empID").val("")
+    $("#datePicker").val("")
+}
+
+function setupDonationSearch() {
     let timeout = null;
     $('#searchInput').on('input', function (){
         clearTimeout(timeout);
@@ -235,7 +233,7 @@ $(document).ready(function (){
             searchDonations(query);
         }
     });
-});
+}
 
 function searchDonations(donationId){
     console.log("Searching for donationId:", donationId);
@@ -273,6 +271,7 @@ function searchDonations(donationId){
     })
 }
 
+
 $(document).ready(function () {
     $(document).on('click', '#donationTable tr', function () {
         let col0 = $(this).find('td:eq(0)').text();
@@ -290,6 +289,30 @@ $(document).ready(function () {
         $('#datePicker').val(col5);
     });
 })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

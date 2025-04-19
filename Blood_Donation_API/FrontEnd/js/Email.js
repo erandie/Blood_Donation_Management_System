@@ -6,13 +6,13 @@ function getAuthHeaders() {
 }
 
 $(document).ready(function () {
-    $('#emailForm-ii').on('submit', function (e) {
+    $('#emailForm').on('submit', function (e) {
         e.preventDefault();
 
-        let name = $('#name-ii').val();
-        let email = $('#email-ii').val();
-        let subject = $('#subject-ii').val();
-        let message = $('#message-ii').val();
+        let name = $('#name').val();
+        let email = $('#email').val();
+        let subject = $('#subject').val();
+        let message = $('#message').val();
 
         $.ajax({
             method: "POST",
@@ -27,7 +27,7 @@ $(document).ready(function () {
             }),
 
             success: function (res){
-                $('#emailForm-ii')[0].reset();
+                $('#emailForm')[0].reset();
                 $('.loading').hide();
                 $('.sent-message').show().text(res);
                 console.log("success", res)

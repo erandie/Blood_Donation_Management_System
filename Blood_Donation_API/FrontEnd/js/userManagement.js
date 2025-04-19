@@ -160,12 +160,7 @@ function getAllUsers(){
                         <td>${user.email}</td>
                         <td>${user.mobile}</td>
                         <td>${user.address}</td>
-                        <td id="status-${user.id}">${user.active ? "✅ Active" : "❌ Inactive"}</td>
-                        <td>
-                                <button class="toggle-btn" data-id="${user.id}" data-status="${user.active}">
-                                    ${user.active ? "Deactivate" : "Activate"}
-                                </button>
-                            </td>
+                      
                     </tr>
                 `);
             })
@@ -176,7 +171,7 @@ function getAllUsers(){
     })
 }
 
-$(document).ready(function (){
+function setupUsersSearch() {
     let timeout = null;
     $('#searchInput').on('input', function (){
         clearTimeout(timeout);
@@ -193,7 +188,7 @@ $(document).ready(function (){
             searchUsers(query);
         }
     });
-});
+}
 
 function searchUsers(name){
     $.ajax({
@@ -212,12 +207,7 @@ function searchUsers(name){
                         <td>${user.email}</td>
                         <td>${user.mobile}</td>
                         <td>${user.address}</td>
-                        <td id="status-${user.id}">${user.active ? "✅ Active" : "❌ Inactive"}</td>
-                        <td>
-                                <button class="toggle-btn" data-id="${user.id}" data-status="${user.active}">
-                                    ${user.active ? "Deactivate" : "Activate"}
-                                </button>
-                            </td>
+                       0
                     </tr>
                 `);
             });
@@ -260,7 +250,7 @@ $(document).ready(function () {
     })
 })
 
-$(document).on("click", ".toggle-btn", function () {
+/*$(document).on("click", ".toggle-btn", function () {
     let userId = $(this).data("userId");
     let currentStatus = $(this).data("status");
     let newStatus = !currentStatus; // Toggle status
@@ -282,7 +272,7 @@ $(document).on("click", ".toggle-btn", function () {
             alert("Failed to update user status.");
         }
     });
-});
+});*/
 
 
 

@@ -3,6 +3,7 @@ package org.example.blood_donation_api.Util;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import jakarta.servlet.http.HttpServletRequest;
 import org.example.blood_donation_api.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -74,6 +75,18 @@ public class JwtUtil implements Serializable {
         final String userName = getUserNameFromToken(token);
         return (userName.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
+
+    public String extractUsernameFromRequest(HttpServletRequest request) {
+        final String authHeader = request.getHeader("Authorization");
+
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            String token = authHeader.substring(7);
+            return getUserNameFromToken(token);
+        }
+
+        throw new RuntimeException("JWT Token is missing or invalid");
+    }
+
 
 
 }

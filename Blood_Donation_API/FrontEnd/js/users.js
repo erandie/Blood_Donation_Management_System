@@ -62,6 +62,7 @@ function loadDetailsToProfileForm(userId) {
         success: function (response) {
             const user = response.data;
 
+            $("#id").val(user.userId);
             $("#name").val(user.name);
             $("#role").empty().append(`<option value="${user.role}">${user.role}</option>`);
             $("#email").val(user.email);
