@@ -5,13 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Profile | Blood Donation System</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
+
     <style>
         :root {
             --primary: #e63946;
-            --secondary: #f1faee;
+            --primary-light: #ff758f;
+            --primary-dark: #c1121f;
+            --secondary: #457b9d;
             --dark: #1d3557;
-            --light: #a8dadc;
+            --light: #f1faee;
+            --gray: #a8dadc;
+            --success: #2a9d8f;
+            --warning: #e9c46a;
+            --danger: #e76f51;
             --white: #ffffff;
+            --text: #333333;
+            --text-light: #6c757d;
+            --bg: #f8f9fa;
+            --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
         }
 
         * {
@@ -35,7 +47,7 @@
         .sidebar {
             width: 250px;
             background-color: var(--dark);
-            color: var(--white);
+
             padding: 20px 0;
             transition: all 0.3s;
         }
@@ -396,7 +408,7 @@
                     <span class="badge">3</span>
                 </div>
                 <div class="profile">
-                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User">
+                    <img src="https://www.w3schools.com/w3images/avatar6.png" alt="User">
                     <span></span>
                 </div>
             </div>
@@ -405,7 +417,7 @@
         <div class="profile-card">
             <div class="profile-header">
                 <div class="profile-image">
-                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Profile Image" id="profileImage">
+                    <img src="https://www.w3schools.com/w3images/avatar6.png" alt="Profile Image" id="profileImage">
                     <div class="edit-icon">
                         <i class="fas fa-pencil-alt"></i>
                         <input type="file" id="imageUpload" style="display: none;" accept="image/*">

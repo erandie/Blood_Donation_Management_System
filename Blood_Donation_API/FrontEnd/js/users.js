@@ -1,6 +1,6 @@
 $(document).ready(function () {
-    loadDetailsToProfileInfo(6);
-    loadDetailsToProfileForm(6);
+    loadDetailsToProfileInfo(12);
+    loadDetailsToProfileForm(12);
     loadRoles();
 });
 

@@ -19,7 +19,7 @@
         :root {
             --primary: #e63946;
             --primary-light: #ff758f;
-            --primary-dark: #c1121f;
+            --primary-dark: #c21f2b;
             --secondary: #457b9d;
             --dark: #1d3557;
             --light: #f1faee;
@@ -548,7 +548,7 @@
             <li><a href="funds.html"><i class="fas fa-tint"></i> <span>Funds</span></a></li>
             <li><a href="user.html"><i class="fas fa-tint"></i> <span>USers</span></a></li>
             <li><a href="#"><i class="fas fa-calendar-alt"></i> <span>Appointments</span></a></li>
-            <li><a href="#"><i class="fas fa-cog"></i> <span>Log Out</span></a></li>
+            <li><a href="index.html"><i class="fas fa-cog"></i> <span>Log Out</span></a></li>
         </ul>
     </div>
 
@@ -646,11 +646,13 @@
     document.querySelectorAll('.menu a').forEach(link => {
         link.addEventListener('click', async function (e) {
 
-
-
             const url1 = this.getAttribute('href');
 
+            const url2 = this.getAttribute('href');
+
             if (url1.includes("bloodBank.html")) return;
+
+            if (url2.includes("index.html")) return;
 
             e.preventDefault();
 
